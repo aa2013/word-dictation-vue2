@@ -10,10 +10,11 @@
         name: 'App',
         data: () => ({}),
         created() {
-            throw this.dialog({
-                prevent: false
-            }).then(r => {
-                console.log(r)
+            this.dialog.show({
+                icon:'mdi-home',
+            }).onRightClick(ins=>{
+                console.log("right")
+                console.log(ins.content)
             })
         }
     };

@@ -7,28 +7,39 @@
         >
             <v-card>
                 <v-card-title class="text-h5">
-                    <v-icon :color="iconColor" :style="iconMargin">{{ icon }}</v-icon>
+                    <v-icon v-show="iconColor!==''" :color="iconColor" :style="iconMargin">
+                        {{ icon }}
+                    </v-icon>
                     {{ title }}
                 </v-card-title>
                 <v-card-text>
                     {{ content }}
                 </v-card-text>
                 <v-card-actions>
+                    <v-btn
+                        :color="neutralColor"
+                        text
+                        v-show="neutralShow"
+                    >
+                        {{ neutralText }}
+                    </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
                         :color="rightColor"
                         text
                         style="margin-right: 10px"
                         @click="left"
+                        v-show="leftShow"
                     >
-                        {{ cancelText }}
+                        {{ leftText }}
                     </v-btn>
                     <v-btn
                         :color="leftColor"
                         text
                         @click="right"
+                        v-show="rightShow"
                     >
-                        {{ okText }}
+                        {{ rightText }}
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -46,11 +57,14 @@
             content: {
                 default: '内容'
             },
-            okText: {
+            rightText: {
                 default: "确定"
             },
-            cancelText: {
+            leftText: {
                 default: "取消"
+            },
+            neutralText: {
+                default: "中立"
             },
             maxWidth: {
                 default: 290
@@ -64,11 +78,23 @@
             rightColor: {
                 default: 'green darken-1'
             },
+            neutralColor: {
+                default: 'green darken-1'
+            },
             icon: {
                 default: ''
             },
             type: {
                 default: ''
+            },
+            neutralShow: {
+                default: false
+            },
+            leftShow: {
+                default: true
+            },
+            rightShow: {
+                default: true
             },
         },
         data() {
@@ -84,26 +110,30 @@
         },
         computed: {
             iconMargin() {
-                if (Object.keys(this.iconColors).includes(this.icon)) {
+                if (Object.keys(this.iconColors).includes(this.type)) {
                     return 'margin-right: 10px'
                 }
                 return ''
             },
             iconColor() {
-                if (Object.keys(this.iconColors).includes(this.icon)) {
-                    return this.iconColors[this.icon]
+                if (Object.keys(this.iconColors).includes(this.type)) {
+                    return this.iconColors[this.type]
                 }
                 return ''
             }
         },
         methods: {
             right() {
-                this.show = false
                 this.$emit("right")
             },
             left() {
-                this.show = false
                 this.$emit("left")
+            },
+            neutral() {
+                this.$emit("neutral")
+            },
+            close() {
+                this.show = false
             }
         }
     }

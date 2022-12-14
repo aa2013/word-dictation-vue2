@@ -4,23 +4,47 @@ import Vuetify from 'vuetify/lib';
 
 const DialogConstructor = Vue.extend(MyDialog)
 
-const dialog = function (options) {
+const dialog = function () {
     const instance = new DialogConstructor()
     //这个得有，不然vuetify会主题出问题
     instance.$vuetify = new Vuetify().framework
     instance.$mount()
     document.body.appendChild(instance.$el)
-    Object.assign(instance, options)
-    instance.show = true
-    return new Promise(revolve => {
-        instance.$on("left", () => {
-            revolve(true)
-        })
+    let getThis = () => Vue.prototype.dialog
+    const setPrevent = (prevent) => {
+        instance.prevent = prevent
+        return getThis()
+    }
+    const show = (options) => {
+        Object.assign(instance, options)
+        instance.show = true
+        return getThis()
+    }
+    const rightClick = (func) => {
         instance.$on("right", () => {
-            revolve(false)
+            func(instance)
         })
-    })
+        return getThis()
+    }
+    const leftClick = (func) => {
+        instance.$on("left", () => {
+            func(instance)
+        })
+        return getThis()
+    }
+    const neutralClick = (func) => {
+        instance.$on("neutral", () => {
+            func(instance)
+        })
+        return getThis()
+    }
+    return {
+        show: show,
+        setPrevent: setPrevent,
+        onLeftClick: leftClick,
+        onRightClick: rightClick,
+        onNeutralClick: neutralClick,
+    }
 }
-
 
 export default dialog()
