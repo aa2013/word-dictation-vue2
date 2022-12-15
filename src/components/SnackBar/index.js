@@ -8,7 +8,7 @@ const bar = function () {
     const instance = new SnackBarConstructor()
     //这个得有，不然vuetify会主题出问题
     instance.$vuetify = new Vuetify().framework
-    instance.$mount('#app')
+    instance.$mount()
     document.body.appendChild(instance.$el)
 
     instance.show = (options) => {

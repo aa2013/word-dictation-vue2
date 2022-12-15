@@ -1,21 +1,22 @@
 <template>
-    <v-app>
+    <v-app style="width: 100%;height: 100%">
         <router-view/>
     </v-app>
 </template>
 
 <script>
+
     export default {
         name: 'app',
         created() {
-            this.loading.show()
-            this.showSnackBar("123")
-            // this.dialog.show()
             if (!localStorage.getItem('token')) {
-                if (window.location.pathname!=="/login") {
-                    // this.$router.push("/login")
+                if (window.location.pathname !== "/login") {
+                    this.$router.push("/login")
                 }
             }
+        },
+        mounted() {
+
         }
     }
 </script>

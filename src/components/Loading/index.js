@@ -8,12 +8,13 @@ const loading = function () {
     let instance = new LoadingConstructor()
     //这个得有，不然vuetify会主题出问题
     instance.$vuetify = new Vuetify().framework
-    instance.$mount('#app')
+    instance.$mount()
     document.body.appendChild(instance.$el)
     let t;
     instance.show = (options) => {
         Object.assign(instance, options)
         instance.visibility = true
+        //两秒后显示取消加载的按钮
         t = setTimeout(() => {
             instance.cancelShow = true
         }, 2000)

@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-overlay :value="visibility" class="text-center">
+        <v-overlay z-index="7" :value="visibility" class="text-center">
             <div style="display: flex;justify-content: center">
                 <v-progress-circular color="blue" indeterminate width="3" :size="size"/>
             </div>
@@ -33,7 +33,6 @@
                 if (!this.cancelShow)
                     return
                 this.close()
-                this.showSnackBar("已取消加载！")
             }
         }
     }
