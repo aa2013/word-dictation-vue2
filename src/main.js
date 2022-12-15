@@ -9,7 +9,7 @@ import SnackBar from "@/components/SnackBar";
 import MyDialog from '@/components/Dialog'
 import Loading from '@/components/Loading'
 
-Vue.prototype.snackBar = SnackBar
+Vue.prototype.showSnackBar = SnackBar.show
 Vue.prototype.dialog = MyDialog
 Vue.prototype.loading = Loading
 Vue.config.productionTip = false

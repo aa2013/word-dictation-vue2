@@ -9,7 +9,8 @@
         name: 'app',
         created() {
             this.loading.show()
-            this.dialog.show()
+            this.showSnackBar("123")
+            // this.dialog.show()
             if (!localStorage.getItem('token')) {
                 if (window.location.pathname!=="/login") {
                     // this.$router.push("/login")

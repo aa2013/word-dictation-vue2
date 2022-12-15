@@ -5,14 +5,7 @@ import Vuetify from 'vuetify/lib';
 const SnackBarConstructor = Vue.extend(SnackBar)
 
 const bar = function () {
-    const instance = new SnackBarConstructor({
-        data: {
-            visibility: false,
-            time: 3000,
-            color: 'blue',
-            text: ""
-        }
-    })
+    const instance = new SnackBarConstructor()
     //这个得有，不然vuetify会主题出问题
     instance.$vuetify = new Vuetify().framework
     instance.$mount('#app')

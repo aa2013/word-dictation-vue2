@@ -22,11 +22,7 @@ const loading = function () {
         instance.visibility = false
         instance.cancelShow = false
         clearTimeout(t)
-        console.log("close")
     }
-    // instance.$on("cancel", () => {
-    //     instance.close()
-    // })
     return instance
 }
 
