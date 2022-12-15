@@ -7,7 +7,7 @@
                     :color="btnColor"
                     text
                     v-bind="attrs"
-                    @click="">
+                    @click="btnClick">
                     {{ btnText }}
                 </v-btn>
             </template>
@@ -25,8 +25,13 @@
                 time: 3000,
                 color: 'primary',
                 text: "",
-                btnColor: 'pink',
+                btnColor: 'white',
                 btnText: '确定',
+            }
+        },
+        methods:{
+            btnClick(){
+                this.onClick()
             }
         }
     }

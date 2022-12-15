@@ -7,7 +7,7 @@
             <p style="margin-top: 10px;font-size: 14px">拼命加载中...</p>
             <v-btn color="primary" :class="cancelShow?'btn-show':'btn-hidden'" depressed rounded
                    @click="cancel">
-                取消加载
+                {{ cancelText }}
             </v-btn>
         </v-overlay>
     </v-app>
@@ -20,6 +20,9 @@
         props: {
             size: {
                 default: 48
+            },
+            cancelText: {
+                default: '取消加载'
             }
         },
         data: () => ({

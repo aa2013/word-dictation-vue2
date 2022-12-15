@@ -11,18 +11,34 @@ const loading = function () {
     instance.$mount()
     document.body.appendChild(instance.$el)
     let t;
+    //显示遮罩
     instance.show = (options) => {
+        instance.autoClose = true
         Object.assign(instance, options)
         instance.visibility = true
         //两秒后显示取消加载的按钮
         t = setTimeout(() => {
             instance.cancelShow = true
         }, 2000)
+        return instance
     }
+    //关闭加载遮罩时的回调函数
+    let closeAction = () => {
+    }
+    //设置关闭加载遮罩时的回调函数
+    instance.setCloseAction = (func) => {
+        if (typeof func === "function") {
+            closeAction = func
+        }
+    }
+    //关闭加载遮罩
     instance.close = () => {
-        instance.visibility = false
-        instance.cancelShow = false
         clearTimeout(t)
+        instance.cancelShow = false
+        closeAction(instance)
+        if (instance.autoClose) {
+            instance.visibility = false
+        }
     }
     return instance
 }

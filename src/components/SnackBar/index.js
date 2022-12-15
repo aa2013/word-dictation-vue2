@@ -12,10 +12,20 @@ const bar = function () {
     document.body.appendChild(instance.$el)
 
     instance.show = (options) => {
-        instance.time = options.time ?? 3000
-        instance.color = options.color ?? "blue"
-        instance.text = options.text ?? options
+        instance.autoClose = true
+        Object.assign(instance,options)
+        if (typeof options==="string") {
+            instance.text = options
+        }
         instance.visibility = true
+    }
+    instance.onClick = (action) => {
+        if (typeof action === "function") {
+            action(instance)
+        }
+        if (instance.autoClose) {
+            instance.visibility = false
+        }
     }
     return instance
 }
