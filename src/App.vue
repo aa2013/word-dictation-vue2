@@ -1,21 +1,23 @@
 <template>
     <v-app>
-
+        <router-view/>
     </v-app>
 </template>
 
 <script>
-
     export default {
-        name: 'App',
-        data: () => ({}),
+        name: 'app',
         created() {
-            this.dialog.show({
-                icon:'mdi-home',
-            }).onRightClick(ins=>{
-                console.log("right")
-                console.log(ins.content)
-            })
+            this.loading.show()
+            this.dialog.show()
+            if (!localStorage.getItem('token')) {
+                if (window.location.pathname!=="/login") {
+                    // this.$router.push("/login")
+                }
+            }
         }
-    };
+    }
 </script>
+
+<style>
+</style>

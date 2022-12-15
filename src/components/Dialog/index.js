@@ -8,7 +8,7 @@ const dialog = function () {
     const instance = new DialogConstructor()
     //这个得有，不然vuetify会主题出问题
     instance.$vuetify = new Vuetify().framework
-    instance.$mount()
+    instance.$mount('#app')
     document.body.appendChild(instance.$el)
     let getThis = () => Vue.prototype.dialog
     const setPrevent = (prevent) => {

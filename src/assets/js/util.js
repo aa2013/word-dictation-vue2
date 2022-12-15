@@ -9,36 +9,6 @@ const addSessionStorageSetEvent = () => {
         originSetItem.apply(this, arguments);
     }
 }
-const showSnackBar = (text, color, time) => {
-    let SnackBar = {
-        text: text,
-        color: color,
-        time: time,
-        show: true
-    }
-    store.state.snackBar = SnackBar
-}
-const showMsgDialog = (data = {}) => {
-    let MsgDialog = {
-        show: true,
-        persistent: false,
-        maxWidth: 290,
-        title: "",
-        pre: false,
-        message: "",
-        disAgreeText: "取消",
-        disAgreeShow: true,
-        disAgreeAction: null,
-        disAgreeBtnColor: "green darken-1",
-        agreeText: "确定",
-        agreeShow: true,
-        agreeBtnColor: "primary",
-        agreeAction: null
-    }
-    let assign = Object.assign(MsgDialog, data);
-    console.log(assign)
-    store.state.msgDialog = assign
-}
 const toFun = (funStr) => {
     let fun = Function('"use strict";return (' + funStr + ')')();
     if (fun && typeof fun === "function")
@@ -129,14 +99,9 @@ function isPhone(phone) {
     return pattern.test(phone)
 }
 
-function userIsRemember() {
-    return sessionStorage.getItem("remember") === "true";
-}
 
 module.exports = {
-    userIsRemember,
     toFun,
-    showMsgDialog,
     isPhone,
     isEmail,
     formatMinTime,
@@ -144,7 +109,5 @@ module.exports = {
     formatDayTime,
     testEmpty,
     timestampToTime,
-    addLocalStorageSetEvent: addSessionStorageSetEvent,
-    showSnackBar,
     debounce
 }
