@@ -1,73 +1,106 @@
 <template>
     <div>
-        <v-card elevation="1">
-            <el-table
-                :data="tableData"
-                style="width: 100%">
-                <el-table-column
-                    label="日期"
-                    width="180">
-                    <template slot-scope="scope">
-                        <i class="el-icon-time"></i>
-                        <span style="margin-left: 10px">{{ scope.row.date }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="姓名"
-                    width="180">
-                    <template slot-scope="scope">
-                        <el-popover trigger="hover" placement="top">
-                            <p>姓名: {{ scope.row.name }}</p>
-                            <p>住址: {{ scope.row.address }}</p>
-                            <div slot="reference" class="name-wrapper">
-                                <el-tag size="medium">{{ scope.row.name }}</el-tag>
-                            </div>
-                        </el-popover>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                    <template slot-scope="scope">
-                        <el-button
-                            size="mini"
-                            @click="handleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button
-                            size="mini"
-                            type="danger"
-                            @click="handleDelete(scope.$index, scope.row)">删除
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+        <v-card elevation="1" style="width: 100%;height: 100%;padding: 10px">
+            <div class="d-flex flex-column justify-space-between" style="height: 100%">
+                <el-table ref="table"
+                          :data="tableData"
+                          highlight-current-row
+                          style="width: 100%">
+                    <el-table-column
+                        label="id"
+                        prop="id"
+                        align="center"
+                        width="50">
+                    </el-table-column>
+                    <el-table-column
+                        label="库名"
+                        align="center"
+                        prop="libName"
+                        width="150">
+                    </el-table-column>
+                    <el-table-column
+                        label="创建者"
+                        align="center"
+                        prop="creator"
+                        width="100">
+                    </el-table-column>
+                    <el-table-column
+                        label="创建时间"
+                        align="center"
+                        prop="createTime"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column
+                        label="最后更新"
+                        align="center"
+                        prop="updateTime"
+                        width="180">
+                    </el-table-column>
+                    <el-table-column label="操作"
+                                     align="center">
+                        <template slot-scope="scope">
+                            <v-btn icon>
+                                <v-icon>mdi-plus</v-icon>
+                            </v-btn>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                    @size-change="sizeChange"
+                    @current-change="currentChange"
+                    :current-page="page.current"
+                    :page-sizes="[10,20,30,40]"
+                    :page-size="page.size"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="page.total">
+                </el-pagination>
+            </div>
         </v-card>
     </div>
 </template>
 
 <script>
+    import * as lib from '@/network/details/lib'
+    import TableLoading from "@/components/TableLoading";
+
     export default {
         name: "CommonLib",
         data: () => ({
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }]
+            tableData: [],
+            loadShow: true,
+            page: {
+                size: 10,
+                total: 0,
+                current: 1
+            }
         }),
         created() {
+            lib.getListCommon({
+                pageNum: 1,
+                pageSize: 10
+            }).then(res => {
+                this.tableData = res.data.list
+                this.page.total = res.data.total
+                this.loadShow = false
+                this.tableLoading.close()
+            })
         },
-        methods: {}
+        mounted() {
+            let table = this.$refs['table']
+            let header = table.$el.getElementsByClassName('el-table__header-wrapper')[0]
+            let container = document.createElement('div')
+            this.tableLoading = TableLoading.init(container)
+            header.appendChild(container)
+            this.tableLoading.show()
+        },
+        methods: {
+            currentChange() {
+
+            },
+            sizeChange() {
+
+            }
+        }
     }
 </script>
 

@@ -107,24 +107,16 @@
 </template>
 
 <script>
-    import * as user from '../network/details/user'
 
     export default {
         name: "Root",
         data: () => ({
-            //抽屉相关
+            //菜单相关
             firstSelected: 0,
             secondSelected: 0,
             curFirst: 0,
             //抽屉
             drawer: null,
-            //消息条提示
-            snackbar: {
-                color: '',
-                text: '',
-                time: '',
-                show: false
-            },
             // 用户信息相关
             user: {
                 avatar: '../assets/img/avatar.jpg',
@@ -161,7 +153,6 @@
             gotoPage(menu, path) {
                 if (this.$route.path === path)
                     return
-                console.log(path)
                 this.$router.push({path: path})
             },
             /**
@@ -171,7 +162,6 @@
                 this.breadcrumb = this.$route.matched;
                 let route = this.$route.path
                 this.menu = this.$router.options.routes[0].children
-                console.log(this.menu)
                 for (let i = 0; i < this.menu.length; i++) {
                     let menu = this.menu[i];
                     if (route.indexOf(menu.path) === 0) {
