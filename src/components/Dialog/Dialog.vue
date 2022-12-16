@@ -6,13 +6,13 @@
             :max-width="maxWidth"
         >
             <v-card>
-                <v-card-title class="text-h5">
+                <v-card-title class="text-h6">
                     <v-icon v-show="iconColor!==''" :color="iconColor" :style="iconMargin">
                         {{ icon }}
                     </v-icon>
                     {{ title }}
                 </v-card-title>
-                <v-card-text>
+                <v-card-text class="text-h6">
                     {{ content }}
                 </v-card-text>
                 <v-card-actions>
@@ -20,6 +20,7 @@
                         :color="neutralColor"
                         text
                         v-show="neutralShow"
+                        @click="neutral"
                     >
                         {{ neutralText }}
                     </v-btn>
@@ -73,16 +74,16 @@
                 default: true
             },
             leftColor: {
-                default: 'green darken-1'
+                default: 'primary'
             },
             rightColor: {
-                default: 'green darken-1'
+                default: 'primary'
             },
             neutralColor: {
-                default: 'green darken-1'
+                default: 'primary'
             },
             icon: {
-                default: ''
+                default: 'mdi-information-outline'
             },
             type: {
                 default: ''
@@ -124,13 +125,13 @@
         },
         methods: {
             right() {
-                this.$emit("right")
+                this.rightClick()
             },
             left() {
-                this.$emit("left")
+                this.leftClick()
             },
             neutral() {
-                this.$emit("neutral")
+                this.neutralClick()
             },
             close() {
                 this.show = false

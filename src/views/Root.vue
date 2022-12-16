@@ -150,8 +150,8 @@
         },
         methods: {
             logout() {
+                localStorage.removeItem('token')
                 this.$router.push('/login?logout');
-                this.$store.commit('setMenus', [])
             },
             /**
              * 点击菜单页面跳转

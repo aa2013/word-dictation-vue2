@@ -16,34 +16,63 @@ const dialog = function () {
         return getThis()
     }
     const show = (options) => {
+        instance.autoClose = true
         Object.assign(instance, options)
         instance.show = true
         return getThis()
     }
-    const rightClick = (func) => {
-        instance.$on("right", () => {
-            func(instance)
-        })
+    let leftClickActon = () => {
+    }
+    let rightClickActon = () => {
+    }
+    let neutralClickActon = () => {
+    }
+
+    function onLeftClick(action) {
+        if (typeof action === "function") {
+            leftClickActon = action
+        }
+    }
+
+    function onRightClick(action) {
+        if (typeof action === "function") {
+            rightClickActon = action
+        }
+    }
+
+    function onNeutralClick(action) {
+        if (typeof action === "function") {
+            neutralClickActon = action
+        }
+    }
+
+    instance.leftClick = () => {
+        leftClickActon()
+        if (instance.autoClose) {
+            instance.show = false
+        }
         return getThis()
     }
-    const leftClick = (func) => {
-        instance.$on("left", () => {
-            func(instance)
-        })
+    instance.rightClick = () => {
+        rightClickActon()
+        if (instance.autoClose) {
+            instance.show = false
+        }
         return getThis()
     }
-    const neutralClick = (func) => {
-        instance.$on("neutral", () => {
-            func(instance)
-        })
+    instance.neutralClick = () => {
+        neutralClickActon()
+        if (instance.autoClose) {
+            instance.show = false
+        }
         return getThis()
     }
     return {
         show: show,
         setPrevent: setPrevent,
-        onLeftClick: leftClick,
-        onRightClick: rightClick,
-        onNeutralClick: neutralClick,
+        onLeftClick: onLeftClick,
+        onRightClick: onRightClick,
+        onNeutralClick: onNeutralClick,
     }
 }
 

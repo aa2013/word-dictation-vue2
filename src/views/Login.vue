@@ -36,6 +36,8 @@
 </template>
 
 <script>
+    import * as user from '@/network/details/user'
+    import {JSEncrypt} from 'jsencrypt'
 
     export default {
         name: "Login",
@@ -47,7 +49,7 @@
             verifyCode: '',
             lessTime: 0,
             loginType: 'pwd',
-            time: null
+            time: null,
         }),
         created() {
             if (this.isLogOut()) {
@@ -77,7 +79,7 @@
              * 成功登录后干的事情
              * */
             loginSuccess(res) {
-                res = res.data
+                //todo 登录成功
                 this.loggingIn = false
                 this.$router.push("/")
             },
@@ -88,6 +90,20 @@
                 if (this.loggingIn)
                     return
                 this.loggingIn = true
+                user.getPublicKey().then(res => {
+                    let key = res.data
+                    key = key.substring(0, 17) + key.substring(22)
+                    let jsEncrypt = new JSEncrypt();
+                    jsEncrypt.setPublicKey(key)
+                    let account = jsEncrypt.encrypt(this.account)
+                    let pwd = jsEncrypt.encrypt(this.password)
+                    user.login({
+                        account: account,
+                        password: pwd
+                    }).then(res => {
+                        this.loginSuccess(res)
+                    })
+                })
             },
         }
     }

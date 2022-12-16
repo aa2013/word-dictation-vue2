@@ -1,9 +1,18 @@
 import {request} from "../request";
-export function abc(data){
+
+export function getPublicKey(data) {
     return request({
-        url: '/dep/list',
+        url: '/user/key',
         method: 'get',
         params: data,
-        anim:false
+        animation: false
+    })
+}
+export function login(data) {
+    return request({
+        url: '/user/login',
+        method: 'post',
+        params: data,
+        animation: false
     })
 }
