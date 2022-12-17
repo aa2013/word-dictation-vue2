@@ -1,7 +1,7 @@
 <template>
     <div class="hw100">
-        <div v-if="detail" class="hw100">
-            <detail-lib class="hw100"></detail-lib>
+        <div v-if="libId" class="hw100">
+            <detail-lib :lib-id="libId" class="hw100"></detail-lib>
         </div>
         <div v-else class="d-flex flex-wrap hw100">
             <lib-card @click.native="gotoDetail(item)" v-for="item in libs" style="margin-right: 10px" :card="item"/>
@@ -24,22 +24,24 @@
         components: {LibCard, DetailLib},
         data: () => ({
             libs: [],
-            detail: false
+            libId: false
         }),
         watch: {
             $route() {
-                this.detail = this.$route.query.id
+                this.libId = this.$route.query.id
             },
         },
         created() {
-            this.detail = this.$route.query.id
-            lib.getListSelf({
-                pageSize: 10,
-                pageNum: 1
-            }).then(res => {
-                let data = res.data
-                this.libs = data.list
-            })
+            this.libId = this.$route.query.id
+            if (!this.libId) {
+                lib.getListSelf({
+                    pageSize: 10,
+                    pageNum: 1
+                }).then(res => {
+                    let data = res.data
+                    this.libs = data.list
+                })
+            }
         },
         methods: {
             gotoDetail(lib) {

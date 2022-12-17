@@ -49,6 +49,7 @@
                     </el-table-column>
                 </el-table>
                 <el-pagination
+                    style="margin-top: 10px"
                     @size-change="sizeChange"
                     @current-change="currentChange"
                     :current-page="page.current"
