@@ -5,10 +5,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        query: []
     },
     mutations: {
+        setQuery: (state, data) => {
+            let path = data['path']
+            state.query[path] = data['query']
+        }
     },
-    getters: {},
+    getters: {
+        query: state => state.query
+    },
     actions: {},
     modules: {}
 })

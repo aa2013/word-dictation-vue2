@@ -12,6 +12,7 @@ const routes = [
     {
         path: '/root',
         component: Root,
+        redirect: '/common-lib',
         meta: {
             title: '单词本'
         },

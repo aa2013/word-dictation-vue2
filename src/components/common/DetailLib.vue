@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card elevation="1" class="hw100" style="padding: 10px">
+        <v-card elevation="1" style="width: 100%;height: 100%;padding: 10px">
             <div class="d-flex flex-column justify-space-between" style="height: 100%">
                 <el-table ref="table"
                           :data="tableData"
@@ -67,7 +67,7 @@
     import TableLoading from "@/components/tableLoading";
 
     export default {
-        name: "CommonLib",
+        name: "DetailLib",
         data: () => ({
             tableData: [],
             loadShow: true,
@@ -78,15 +78,6 @@
             }
         }),
         created() {
-            lib.getListCommon({
-                pageNum: this.page.current,
-                pageSize: this.page.size
-            }).then(res => {
-                this.tableData = res.data.list
-                this.page.total = res.data.total
-                this.loadShow = false
-                this.tableLoading.close()
-            })
         },
         mounted() {
             let table = this.$refs['table']

@@ -5,7 +5,6 @@ export function getListSelf(data) {
         url: '/lib/list/self',
         method: 'get',
         params: data,
-        animation: false
     })
 }
 

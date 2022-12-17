@@ -128,12 +128,16 @@
             //菜单
             menu: [],
             // 面包屑
-            breadcrumb: []
+            breadcrumb: [],
         }),
         computed: {},
         watch: {
             //监听路由变化设置菜单选择
-            $route() {
+            $route(now, old) {
+                this.$store.commit('setQuery', {
+                    path: old.path,
+                    query: old.query
+                })
                 this.setMenuSelected();
             },
         },
@@ -148,12 +152,16 @@
             /**
              * 点击菜单页面跳转
              * @param menu 点击的菜单
-             * @param path 菜单中对应的路径
+             * @param newPath 菜单中对应的路径
              * */
-            gotoPage(menu, path) {
-                if (this.$route.path === path)
+            gotoPage(menu, newPath) {
+                let nowPath = this.$route.path
+                if (nowPath === newPath)
                     return
-                this.$router.push({path: path})
+                this.$router.push({
+                    path: newPath,
+                    query: this.$store.getters.query[newPath]
+                })
             },
             /**
              * 设置所属菜单被选中并展开

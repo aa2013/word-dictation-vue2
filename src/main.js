@@ -5,9 +5,12 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import './plugins/element.js'
-import SnackBar from "@/components/SnackBar";
-import MyDialog from '@/components/Dialog'
-import Loading from '@/components/Loading'
+import SnackBar from "@/components/snackBar";
+import MyDialog from '@/components/dialog'
+import Loading from '@/components/loading'
+
+// 引入全局css样式
+import './assets/css/global.css'
 
 Vue.prototype.showSnackBar = SnackBar.show
 Vue.prototype.dialog = MyDialog
