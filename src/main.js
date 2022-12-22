@@ -8,7 +8,6 @@ import './plugins/element.js'
 import SnackBar from "@/components/snackBar";
 import MyDialog from '@/components/dialog'
 import Loading from '@/components/loading'
-
 // 引入全局css样式
 import './assets/css/global.css'
 

@@ -1,9 +1,9 @@
 <template>
     <div class="hw100">
-        <div v-if="libId" class="hw100">
-            <detail-lib :lib-id="libId" class="hw100"></detail-lib>
+        <div v-show="libId" class="hw100">
+            <detail-lib :lib-id="libId" :lib-name="libName" class="hw100"></detail-lib>
         </div>
-        <div v-else class="d-flex flex-wrap hw100">
+        <div v-show="!libId" class="d-flex flex-wrap">
             <lib-card @click.native="gotoDetail(item)" v-for="item in libs" style="margin-right: 10px" :card="item"/>
             <v-hover v-slot="{ hover }">
                 <v-card class="add-card" shaped :elevation="hover?2:0" flat v-ripple transition="fade-transition">
@@ -24,23 +24,24 @@
         components: {LibCard, DetailLib},
         data: () => ({
             libs: [],
-            libId: false
+            libId: false,
+            libName: ''
         }),
         watch: {
-            $route() {
+            $route(now) {
                 this.libId = this.$route.query.id
+                this.libName = this.$route.query.name
+                console.log(!this.libId,now.path,this.libs)
+                if (!this.libId && now.path==='/my-lib' && this.libs.length===0) {
+                    this.getLibs()
+                }
             },
         },
         created() {
             this.libId = this.$route.query.id
+            this.libName = this.$route.query.name
             if (!this.libId) {
-                lib.getListSelf({
-                    pageSize: 10,
-                    pageNum: 1
-                }).then(res => {
-                    let data = res.data
-                    this.libs = data.list
-                })
+                this.getLibs()
             }
         },
         methods: {
@@ -48,10 +49,20 @@
                 let route = this.$router.resolve({
                     path: '/my-lib',
                     query: {
-                        id: lib.id
+                        id: lib.id,
+                        name: lib.libName
                     }
                 })
                 window.open(route.href, '_blank')
+            },
+            getLibs() {
+                lib.getListSelf({
+                    pageSize: 10,
+                    pageNum: 1
+                }).then(res => {
+                    let data = res.data
+                    this.libs = data.list
+                })
             },
         }
     }

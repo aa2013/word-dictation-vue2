@@ -5,6 +5,8 @@ import MyLib from '../views/MyLib.vue'
 import History from '../views/History.vue'
 import Root from '../views/Root.vue'
 import Login from '../views/Login.vue'
+import Pint from '../views/Print.vue'
+import Print from "@/views/Print";
 
 Vue.use(VueRouter)
 
@@ -52,6 +54,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login
+    },
+    {
+        path: '/print',
+        name: 'print',
+        component: Print
     },
 ]
 
