@@ -17,7 +17,7 @@
 <script>
     import * as lib from '@/network/details/lib'
     import LibCard from "@/components/common/LibCard";
-    import DetailLib from '../components/common/DetailLib.vue'
+    import DetailLib from '@/components/common/DetailLib.vue'
 
     export default {
         name: "MyLib",

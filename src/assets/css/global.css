@@ -10,3 +10,138 @@
 .w100 {
     width: 100%;
 }
+
+#app {
+    position: absolute;
+}
+
+.p10 {
+    padding: 10px;
+}
+
+.p10h {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.p10v {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.p10t {
+    padding-top: 10px;
+}
+
+.p10b {
+    padding-bottom: 10px;
+}
+
+.p10l {
+    padding-left: 10px;
+}
+
+.p10r {
+    padding-right: 10px;
+}
+
+.p5 {
+    padding: 5px;
+}
+
+.p5h {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.p5v {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.p5t {
+    padding-top: 5px;
+}
+
+.p5b {
+    padding-bottom: 5px;
+}
+
+.p5l {
+    padding-left: 5px;
+}
+
+.p5r {
+    padding-right: 5px;
+}
+
+.m10 {
+    margin: 10px;
+}
+
+.m10h {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.m10v {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.m10t {
+    margin-top: 10px;
+}
+
+.m10b {
+    margin-bottom: 10px;
+}
+
+.m10l {
+    margin-left: 10px;
+}
+
+.m10r {
+    margin-right: 10px;
+}
+
+.m10 {
+    margin: 10px;
+}
+
+.m5 {
+    margin: 5px;
+}
+
+.m5h {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.m5v {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.m5t {
+    margin-top: 5px;
+}
+
+.m5b {
+    margin-bottom: 5px;
+}
+
+.m5l {
+    margin-left: 5px;
+}
+
+.m5r {
+    margin-right: 5px;
+}
+
+.m5 {
+    margin: 5px;
+}
+.non-select {
+    user-select: none;
+}
