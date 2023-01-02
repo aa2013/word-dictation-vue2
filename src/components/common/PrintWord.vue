@@ -19,12 +19,20 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
     .word-container {
         text-align: center;
         width: 30mm;
         height: 20mm;
         font-size: 14pt;
         margin-right: 3mm;
+      >hr{
+        margin:2mm 0;
+      }
+      >div{
+        line-height: 22px;
+        height: 22px;
+        overflow: hidden;
+      }
     }
 </style>

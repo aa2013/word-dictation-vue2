@@ -62,7 +62,7 @@
               {{ scope.row['usSymbol'] }}
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn small icon color="primary" v-bind="attrs" v-on="on">
+                  <v-btn @click.stop="" small icon color="primary" v-bind="attrs" v-on="on">
                     <v-icon>mdi-volume-high</v-icon>
                   </v-btn>
                 </template>
@@ -78,7 +78,7 @@
               {{ scope.row['enSymbol'] }}
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn small icon color="primary" v-bind="attrs" v-on="on">
+                  <v-btn @click.stop="" small icon color="primary" v-bind="attrs" v-on="on">
                     <v-icon>mdi-volume-high</v-icon>
                   </v-btn>
                 </template>
@@ -86,12 +86,20 @@
               </v-tooltip>
             </div>
           </el-table-column>
-          <el-table-column label="操作" width="100"
+          <el-table-column label="操作" width="130"
                            align="center">
             <div slot-scope="scope">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon color="primary" v-bind="attrs" v-on="on">
+                  <v-btn @click.stop="" icon color="primary" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-eye</v-icon>
+                  </v-btn>
+                </template>
+                <span>查看</span>
+              </v-tooltip>
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn @click.stop="" icon color="primary" v-bind="attrs" v-on="on">
                     <v-icon>mdi-pencil</v-icon>
                   </v-btn>
                 </template>
@@ -99,7 +107,7 @@
               </v-tooltip>
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon color="red" v-bind="attrs" v-on="on">
+                  <v-btn @click.stop="" icon color="red" v-bind="attrs" v-on="on">
                     <v-icon>mdi-trash-can-outline</v-icon>
                   </v-btn>
                 </template>
@@ -129,13 +137,28 @@
         <v-card-text>
           <div id="printContent">
             <div class="print-root d-flex flex-wrap justify-start align-content-start">
-              <print-word v-for="item in selectItems" :word="item.word"
-                          :explain="item.explains[0]['explanation']"></print-word>
+              <print-word v-for="(item,i) in selectItems" :key="i" :word="item.word"
+                          :hidden-word="genDialog.hideWord"
+                          :explain="item.explain['explanation']"/>
             </div>
           </div>
           <iframe id="iframe" v-show="false" :src="printUrl"></iframe>
         </v-card-text>
         <v-card-actions>
+          <v-btn
+              color="green darken-1"
+              text
+              @click="">
+            保存此方案
+          </v-btn>
+          <v-btn
+              color="green darken-1"
+              text
+              @click="randomResult">
+            打乱顺序
+          </v-btn>
+          <v-checkbox v-model="genDialog.hideWord" hide-details
+                      style="margin: 0" label="中译英"/>
           <v-spacer></v-spacer>
           <v-btn
               color="green darken-1"
@@ -189,21 +212,22 @@
           <v-btn
               color="green darken-1"
               text
-              @click="importDialog.previewShow = !importDialog.previewShow">
-            {{ importDialog.previewShow ? "编辑" : "预览" }}
+              v-show="importDialog.previewShow"
+              @click="importDialog.previewShow = false">
+            编辑
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
               color="green darken-1"
               text
-              @click="importDialog.show = false">
+              @click="importDialog.show = importDialog.content=''">
             关闭
           </v-btn>
           <v-btn
               color="green darken-1"
               text
               @click="importDialogSubmit">
-            导入
+            {{ importDialog.previewShow ? "导入" : "预览" }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -240,7 +264,8 @@ export default {
       current: 1
     },
     genDialog: {
-      show: false
+      show: false,
+      hideWord: false
     },
     importDialog: {
       show: false,
@@ -291,7 +316,14 @@ export default {
     this.tableLoading.show()
   },
   methods: {
+    randomResult() {
+      this.selectItems.sort(() => 0.5 - Math.random())
+    },
     async importDialogSubmit() {
+      if (!this.importDialog.previewShow) {
+        this.importDialog.previewShow = true
+        return
+      }
       let words = this.importDialog.words
       for (let i = 0; i < words.length; i++) {
         let single = words[i]
@@ -347,12 +379,10 @@ export default {
       })
     },
     generateExplain(row) {
-      let explains = row.explains;
-      let res = ""
-      explains.forEach((t) => {
-        res += `${t['type']}. ${t['explanation']}`
-      })
-      return res
+      let explains = row.explain;
+      let type = explains['type']
+      let explanation = explains['explanation']
+      return `${type}. ${explanation}`
     }
   }
 }
