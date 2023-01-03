@@ -5,16 +5,24 @@ export function importSingle(data) {
         url: '/word/import/single',
         method: 'post',
         params: data,
-        animation: false
+        animation: false,
+        dialog: false
     })
 }
 
 export function getWordList(data) {
     return request({
-        url: '/word/list',
+        url: '/word/search',
         method: 'get',
         params: data,
         animation: false
+    })
+}
+export function getRandomWordList(data) {
+    return request({
+        url: '/word/randomList',
+        method: 'get',
+        params: data,
     })
 }
 

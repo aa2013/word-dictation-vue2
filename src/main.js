@@ -10,7 +10,7 @@ import MyDialog from '@/components/dialog'
 import Loading from '@/components/loading'
 // 引入全局css样式
 import './assets/css/global.css'
-
+// 教材http://www.goodkejian.com/list/3_1.htm
 Vue.prototype.showSnackBar = SnackBar.show
 Vue.prototype.dialog = MyDialog
 Vue.prototype.loading = Loading

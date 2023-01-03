@@ -5,6 +5,7 @@ import Vue from 'vue'
 export function request(config) {
     let vue = Vue.prototype;
     config.animation = config.animation ?? true
+    config.dialog = config.dialog ?? true
     const instance = axios.create({
         //根路径
         //开发时的后端请求路径
@@ -53,20 +54,25 @@ export function request(config) {
         }
         if (res.data.status !== 200) {
             let desc = res.data.desc;
-            console.log(res.data.desc)
             desc = desc ?? "服务器内部错误"
-            vue.dialog.show({
-                title: "请求失败",
-                content: (res.data.status ?? res.data.code) + " : " + desc,
-                leftShow: false,
-                type: "danger"
-            })
+            if (config.dialog) {
+                vue.dialog.show({
+                    title: "请求失败",
+                    content: (res.data.status ?? res.data.code) + " : " + desc,
+                    leftShow: false,
+                    type: "danger"
+                })
+            }
+            return Promise.reject(res.data)
         }
         sessionStorage.setItem("serverError", "false")
         return res.data
     }, err => {
         endLoading()
         let status = -1;
+        if (config.dialog !== true) {
+            return
+        }
         if (err.response === undefined) {
             vue.dialog.show({
                 title: "请求失败",
@@ -120,6 +126,7 @@ export function request(config) {
                 type: "danger"
             })
         }
+        return err;
     })
     // 发送真正的网络请求
     return instance(config)

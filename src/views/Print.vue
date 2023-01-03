@@ -13,7 +13,7 @@
 <style scoped>
 
     .print-root {
-        border: #1485FE solid 1px;
+        /*border: #1485FE solid 1px;*/
         /*需要将预览显示的界面限定在A4大小*/
         width: 210mm;
         /*这个高度为什么不是A4的大小，是经过N次验证的方式得到的，唯一的目的就是为了保证预览和打印预览一致*/
