@@ -20,7 +20,7 @@
           <div>
             已选：{{ getSelectItemsLen }}个，
             随机选择
-            <v-btn icon color="primary">
+            <v-btn @click="randomDialog.show=true" icon color="primary">
               <v-icon>mdi-repeat</v-icon>
             </v-btn>
             <v-btn color="primary" outlined small @click="genDialog.show=true">生成</v-btn>
@@ -133,7 +133,7 @@
             @size-change="sizeChange"
             @current-change="currentChange"
             :current-page="page.current"
-            :page-sizes="[10,20,30,40]"
+            :page-sizes="[10,20,50,100,200]"
             :page-size="page.size"
             layout="total, sizes, prev, pager, next, jumper"
             :total="page.total">
@@ -256,6 +256,31 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="randomDialog.show" scrollable persistent width="350">
+      <v-card>
+        <v-card-title class="text-h5">
+          随机选择
+        </v-card-title>
+        <div class="p10">
+          <v-text-field hide-details outlined label="设置数量" v-model="randomDialog.num"/>
+        </div>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+              color="green darken-1"
+              text
+              @click="randomDialog.show=false">
+            取消
+          </v-btn>
+          <v-btn
+              color="green darken-1"
+              text
+              @click="randomGet">
+            确定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -300,6 +325,10 @@ export default {
       words: [],
       cancel: false,
       failedText: ''
+    },
+    randomDialog: {
+      show: false,
+      num: null,
     },
     search: null
   }),
@@ -350,6 +379,18 @@ export default {
     }
   },
   methods: {
+    randomGet() {
+      word.getRandomWordList({
+        libId: this.libId,
+        size: this.randomDialog.num
+      }).then(res => {
+        this.randomDialog.show = false
+        let data = res.data
+        this.selectItems = data.list
+        this.genDialog.show = true
+        this.randomDialog.num = null
+      })
+    },
     playAudio(url) {
       if (!url)
         return
@@ -488,7 +529,7 @@ export default {
   width: 210mm;
   /*这个高度为什么不是A4的大小，是经过N次验证的方式得到的，唯一的目的就是为了保证预览和打印预览一致*/
   /*可能是我写的有一点问题，但是如果设置为297，那么显示就会出现问题*/
-  height: 297mm;
+  min-height: 150mm;
   /* margin-bottom: 24mm; */
   padding: 5mm;
   background-color: white;
