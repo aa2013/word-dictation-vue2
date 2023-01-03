@@ -115,7 +115,7 @@ export default {
 <style scoped lang="less">
 
 .login-bg {
-    background: url("@/assets/img/bg.png");
+    background: url("../assets/img/bg.png");
     position: fixed;
     width: 100%;
     height: 100%;
