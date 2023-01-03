@@ -6,19 +6,20 @@
 
 <script>
 
-    export default {
-        name: 'app',
-        created() {
-            if (!localStorage.getItem('token')) {
-                if (window.location.pathname !== "/login") {
-                    this.$router.push("/login")
-                }
+export default {
+    name: 'app',
+    created() {
+        // 判断是否登录，未登录则跳转登录页面
+        if (!localStorage.getItem('token')) {
+            if (window.location.pathname !== "/login") {
+                this.$router.push("/login")
             }
-        },
-        mounted() {
-
         }
+    },
+    mounted() {
+
     }
+}
 </script>
 
 <style>

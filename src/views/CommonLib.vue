@@ -64,48 +64,57 @@
 </template>
 
 <script>
-    import * as lib from '@/network/details/lib'
-    import TableLoading from "@/components/tableLoading";
+import * as lib from '@/network/details/lib'
+import TableLoading from "@/components/tableLoading";
 
-    export default {
-        name: "CommonLib",
-        data: () => ({
-            tableData: [],
-            loadShow: true,
-            page: {
-                size: 10,
-                total: 0,
-                current: 1
-            }
-        }),
-        created() {
-            lib.getListCommon({
-                pageNum: this.page.current,
-                pageSize: this.page.size
-            }).then(res => {
-                this.tableData = res.data.list
-                this.page.total = res.data.total
-                this.loadShow = false
-                this.tableLoading.close()
-            })
+export default {
+    name: "CommonLib",
+    data: () => ({
+        // 表格数据
+        tableData: [],
+        //分页相关
+        page: {
+            size: 10,
+            total: 0,
+            current: 1
+        }
+    }),
+    created() {
+        // 分页获取公共库列表
+        lib.getListCommon({
+            pageNum: this.page.current,
+            pageSize: this.page.size
+        }).then(res => {
+            this.tableData = res.data.list
+            this.page.total = res.data.total
+            // 关闭表格加载条
+            this.tableLoading.close()
+        })
+    },
+    mounted() {
+        // 页面载入后设置表格加载条
+        let table = this.$refs['table']
+        let header = table.$el.getElementsByClassName('el-table__header-wrapper')[0]
+        let container = document.createElement('div')
+        this.tableLoading = TableLoading.init(container)
+        header.appendChild(container)
+        this.tableLoading.show()
+    },
+    methods: {
+        /**
+         * 分页改变事件
+         * */
+        currentChange() {
+        
         },
-        mounted() {
-            let table = this.$refs['table']
-            let header = table.$el.getElementsByClassName('el-table__header-wrapper')[0]
-            let container = document.createElement('div')
-            this.tableLoading = TableLoading.init(container)
-            header.appendChild(container)
-            this.tableLoading.show()
-        },
-        methods: {
-            currentChange() {
-
-            },
-            sizeChange() {
-
-            }
+        /**
+         * 分页数量改变事件
+         * */
+        sizeChange() {
+        
         }
     }
+}
 </script>
 
 <style scoped>

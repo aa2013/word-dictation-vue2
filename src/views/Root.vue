@@ -34,11 +34,11 @@
                 </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
-
+        
         <v-app-bar app style="background: white">
-
+            
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
+            
             <v-toolbar-title>
                 <el-breadcrumb separator-class="el-icon-arrow-right">
                     <el-breadcrumb-item style="font-size: 17px" v-for="(item,i) in breadcrumb"
@@ -74,8 +74,8 @@
                                     </span>
                                 </div>
                             </div>
-
-
+                            
+                            
                             <v-divider style="margin: 10px 0"></v-divider>
                             <div class="d-flex flex-column" style="padding: 0 5px">
                                 <v-btn color="primary" text>
@@ -90,14 +90,14 @@
                                     </v-icon>
                                     退出登录
                                 </v-btn>
-
+                            
                             </div>
                         </div>
                     </v-list-item-content>
                 </v-card>
             </v-menu>
         </v-app-bar>
-
+        
         <v-main style="width: 100%;height: 100%;background: #F6F7F9;">
             <keep-alive>
                 <router-view style="width:100%;height:100%;padding: 10px;overflow:auto hidden;"/>
@@ -108,112 +108,112 @@
 
 <script>
 
-    export default {
-        name: "Root",
-        data: () => ({
-            //菜单相关
-            firstSelected: 0,
-            secondSelected: 0,
-            curFirst: 0,
-            //抽屉
-            drawer: null,
-            // 用户信息相关
-            user: {
-                avatar: '../assets/img/avatar.jpg',
-                name: localStorage.getItem('userName'),
-                college: '智能技术与工程学院',
-                number: localStorage.getItem('account'),
-                role: localStorage.getItem('auth') ?? ""
-            },
-            //菜单
-            menu: [],
-            // 面包屑
-            breadcrumb: [],
-        }),
-        computed: {},
-        watch: {
-            //监听路由变化设置菜单选择
-            $route(now, old) {
-                this.$store.commit('setQuery', {
-                    path: old.path,
-                    query: old.query
-                })
-                this.setMenuSelected();
-            },
+export default {
+    name: "Root",
+    data: () => ({
+        //菜单相关
+        firstSelected: 0,
+        secondSelected: 0,
+        curFirst: 0,
+        //抽屉
+        drawer: null,
+        // 用户信息相关
+        user: {
+            avatar: '../assets/img/avatar.jpg',
+            name: localStorage.getItem('userName'),
+            college: '智能技术与工程学院',
+            number: localStorage.getItem('account'),
+            role: localStorage.getItem('auth') ?? ""
         },
-        created() {
-            this.setMenuSelected()
+        //菜单
+        menu: [],
+        // 面包屑
+        breadcrumb: [],
+    }),
+    computed: {},
+    watch: {
+        //监听路由变化设置菜单选择
+        $route(now, old) {
+            this.$store.commit('setQuery', {
+                path: old.path,
+                query: old.query
+            })
+            this.setMenuSelected();
         },
-        methods: {
-            logout() {
-                localStorage.removeItem('token')
-                this.$router.push('/login?logout');
-            },
-            /**
-             * 点击菜单页面跳转
-             * @param menu 点击的菜单
-             * @param newPath 菜单中对应的路径
-             * */
-            gotoPage(menu, newPath) {
-                let nowPath = this.$route.path
-                if (nowPath === newPath)
-                    return
-                this.$router.push({
-                    path: newPath,
-                    query: this.$store.getters.query[newPath]
-                })
-            },
-            /**
-             * 设置所属菜单被选中并展开
-             * */
-            async setMenuSelected() {
-                this.breadcrumb = this.$route.matched;
-                let route = this.$route.path
-                this.menu = this.$router.options.routes[0].children
-                for (let i = 0; i < this.menu.length; i++) {
-                    let menu = this.menu[i];
-                    if (route.indexOf(menu.path) === 0) {
-                        this.firstSelected = this.curFirst = i;
-                        if (menu.children === undefined) {
-                            return
-                        }
-                        for (let j = 0; menu.children && j < menu.children.length; j++) {
-                            let children = menu.children[j]
-                            if (route.indexOf(children.path) !== -1) {
-                                this.secondSelected = j
-                                return;
-                            }
+    },
+    created() {
+        this.setMenuSelected()
+    },
+    methods: {
+        logout() {
+            localStorage.removeItem('token')
+            this.$router.push('/login?logout');
+        },
+        /**
+         * 点击菜单页面跳转
+         * @param menu 点击的菜单
+         * @param newPath 菜单中对应的路径
+         * */
+        gotoPage(menu, newPath) {
+            let nowPath = this.$route.path
+            if (nowPath === newPath)
+                return
+            this.$router.push({
+                path: newPath,
+                query: this.$store.getters.query[newPath]
+            })
+        },
+        /**
+         * 设置所属菜单被选中并展开
+         * */
+        async setMenuSelected() {
+            this.breadcrumb = this.$route.matched;
+            let route = this.$route.path
+            this.menu = this.$router.options.routes[0].children
+            for (let i = 0; i < this.menu.length; i++) {
+                let menu = this.menu[i];
+                if (route.indexOf(menu.path) === 0) {
+                    this.firstSelected = this.curFirst = i;
+                    if (menu.children === undefined) {
+                        return
+                    }
+                    for (let j = 0; menu.children && j < menu.children.length; j++) {
+                        let children = menu.children[j]
+                        if (route.indexOf(children.path) !== -1) {
+                            this.secondSelected = j
+                            return;
                         }
                     }
                 }
-            },
+            }
         },
-    }
+    },
+}
 </script>
 
 <style scoped lang="less">
 
-    .avatar {
-        user-select: none;
-        margin-right: 10px;
-        cursor: pointer;
+.avatar {
+    user-select: none;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.nav-title {
+    user-select: none;
+    
+    img {
+        position: relative;
+        top: 50%;
+        transform: translate(0, -50%);
     }
-
-    .nav-title {
-        user-select: none;
-
-        img {
-            position: relative;
-            top: 50%;
-            transform: translate(0, -50%);
-        }
-
-        span {
-            display: inline-block;
-            font-size: 23px;
-            font-weight: bold;
-            line-height: 64px;
-            margin-left: 10px;
-        }
+    
+    span {
+        display: inline-block;
+        font-size: 23px;
+        font-weight: bold;
+        line-height: 64px;
+        margin-left: 10px;
     }
+}
 </style>

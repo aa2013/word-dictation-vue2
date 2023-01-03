@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!--    主表格-->
     <v-card elevation="1" class="hw100" style="padding: 10px">
       <div class="d-flex flex-column justify-space-between h100">
         <div style="margin-bottom: 10px" class="d-flex justify-space-between">
@@ -23,7 +24,7 @@
             <v-btn @click="randomDialog.show=true" icon color="primary">
               <v-icon>mdi-repeat</v-icon>
             </v-btn>
-            <v-btn color="primary" outlined small @click="genDialog.show=true">生成</v-btn>
+            <v-btn color="primary" outlined small @click="previewDialog.show=true">生成</v-btn>
           </div>
         </div>
         <el-table ref="table"
@@ -140,10 +141,11 @@
         </el-pagination>
       </div>
     </v-card>
-    <v-dialog v-model="genDialog.show" scrollable persistent width="230mm">
+    <!--    预览弹窗-->
+    <v-dialog v-model="previewDialog.show" scrollable persistent width="230mm">
       <v-card>
         <v-card-title class="text-h5">
-          生成
+          打印预览
         </v-card-title>
         <v-card-text>
           <div id="printContent">
@@ -151,7 +153,7 @@
               <div v-for="i in repeatCount" :key="i">
                 <div class="d-flex flex-wrap justify-start align-content-start">
                   <print-word v-for="(item,i) in getPrintWordList()" :key="i" :word="item.word"
-                              :hidden-word="genDialog.hideWord"
+                              :hidden-word="previewDialog.hideWord"
                               :explain="item.explain['explanation']"/>
                 </div>
                 <hr color="#eee" class="m10v" v-if="i!==repeatCount"/>
@@ -168,14 +170,14 @@
               @click="">
             保存此方案
           </v-btn>
-          <v-checkbox v-model="genDialog.random"
+          <v-checkbox v-model="previewDialog.random"
                       hide-details
                       style="margin: 0" label="乱序"/>
-          <v-checkbox v-model="genDialog.hideWord"
+          <v-checkbox v-model="previewDialog.hideWord"
                       hide-details
                       style="margin: 0" label="中译英"/>
           <div class="m10l" style="width:80px;">
-            <v-text-field :value="genDialog.repeat" dense @input="repeatChange"
+            <v-text-field :value="previewDialog.repeat" dense @input="repeatChange"
                           hide-spin-buttons hide-details type="number" outlined label="重复"
                           suffix="次"/>
           </div>
@@ -183,7 +185,7 @@
           <v-btn
               color="green darken-1"
               text
-              @click="genDialog.show = false">
+              @click="previewDialog.show = false">
             关闭
           </v-btn>
           <v-btn
@@ -195,6 +197,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--    导入弹窗-->
     <v-dialog v-model="importDialog.show" scrollable persistent width="350">
       <v-card>
         <v-card-title class="text-h5">
@@ -256,6 +259,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!--    随机选择弹窗-->
     <v-dialog v-model="randomDialog.show" scrollable persistent width="350">
       <v-card>
         <v-card-title class="text-h5">
@@ -286,9 +290,10 @@
 
 <script>
 import * as word from '@/network/details/word'
+// 表格加载条
 import TableLoading from "@/components/tableLoading";
+// 单词显示打印组件
 import PrintWord from "@/components/common/PrintWord";
-import {getOtherExplains} from "@/network/details/word";
 
 export default {
   name: "DetailLib",
@@ -300,24 +305,24 @@ export default {
     libName: '',
   },
   data: () => ({
+    // 表格选择的项
     selectItems: [],
-    printOption: {
-      id: 'printContent',
-      popTitle: '',
-    },
+    // 表格数据
     tableData: [],
-    loadShow: true,
+    // 分页相关
     page: {
       size: 10,
       total: 0,
       current: 1
     },
-    genDialog: {
+    // 打印预览弹窗相关
+    previewDialog: {
       show: false,
       hideWord: false,
       repeat: 1,
       random: false
     },
+    // 导入弹窗相关
     importDialog: {
       show: false,
       previewShow: false,
@@ -326,24 +331,29 @@ export default {
       cancel: false,
       failedText: ''
     },
+    // 随机弹窗相关
     randomDialog: {
       show: false,
       num: null,
     },
+    // 搜索框内容
     search: null
   }),
   computed: {
+    // 重复次数
     repeatCount() {
-      let val = this.genDialog.repeat
+      let val = this.previewDialog.repeat
       if (val === '') {
         return 1
       }
       let cnt = parseInt(val)
       return cnt <= 0 ? 1 : cnt
     },
+    // 打印页面url
     printUrl() {
       return window.location.origin + '/print'
     },
+    // 表格选择项的数量
     getSelectItemsLen() {
       if (this.selectItems) {
         return this.selectItems.length
@@ -352,16 +362,22 @@ export default {
     },
   },
   watch: {
+    // 监听路由变化
     $route() {
       if (this.libId) {
         this.getWordList()
       }
     },
+    // 监听导入弹窗编辑框内容变化
     "importDialog.content"(val) {
+      // 去除所有的换行
       this.importDialog.words = val.split("\n")
+          // 过滤并忽略空字符串的行
           .filter(v => {
+            // 去除头尾空格然后判断是否为空字符串
             return v.trim().length !== 0
           })
+          // 将所有的单词提取出来，并设置上传状态为等待
           .map(v => ({
             value: v.trim(),
             status: 'wait'
@@ -369,6 +385,7 @@ export default {
     }
   },
   mounted() {
+    // 页面加载好后给表格插入加载条组件
     let table = this.$refs['table']
     let header = table.$el.getElementsByClassName('el-table__header-wrapper')[0]
     let container = document.createElement('div')
@@ -379,6 +396,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * 随机获取单词数量
+     * */
     randomGet() {
       word.getRandomWordList({
         libId: this.libId,
@@ -387,48 +407,73 @@ export default {
         this.randomDialog.show = false
         let data = res.data
         this.selectItems = data.list
-        this.genDialog.show = true
+        this.previewDialog.show = true
         this.randomDialog.num = null
       })
     },
+    /**
+     * 播放音频
+     * @param url 音频 url
+     * */
     playAudio(url) {
       if (!url)
         return
       let audio = new Audio(url)
       audio.play()
     },
+    /**
+     * 获取打印的单词列表
+     * */
     getPrintWordList() {
+      //数组结构
       let temp = [...this.selectItems]
-      if (this.genDialog.random) {
+      //如果要求乱序则打乱数组
+      if (this.previewDialog.random) {
         temp.sort(() => 0.5 - Math.random())
       }
       return temp
     },
+    /**
+     * 打印预览弹窗中的重复次数输入框监听
+     * @param val 输入内容
+     * */
     repeatChange(val) {
       if (!val) {
-        this.genDialog.repeat = 1
+        this.previewDialog.repeat = 1
         return
       }
       let cnt = parseInt(val)
+      // 限制最大为重复50次
       if (cnt > 50) {
-        this.genDialog.repeat = 50
+        this.previewDialog.repeat = 50
       } else {
-        this.genDialog.repeat = cnt <= 0 ? 1 : cnt
+        this.previewDialog.repeat = cnt <= 0 ? 1 : cnt
       }
-      this.$forceUpdate()
     },
+    /**
+     * 将单词id设置当做表格行的键
+     * */
     getTableRowKey(row) {
       return row.id
     },
+    /**
+     * 搜索
+     * */
     searchWord() {
       this.getWordList(this.search)
     },
+    /**
+     * 关闭导入弹窗
+     * */
     closeImportDialog() {
       this.importDialog.show = false
       this.importDialog.content = ''
       this.importDialog.previewShow = false
       this.importDialog.cancel = true
     },
+    /**
+     * 将待导入的单词按顺序提交，async标记为异步
+     * */
     async importDialogSubmit() {
       if (!this.importDialog.previewShow) {
         this.importDialog.previewShow = true
@@ -442,17 +487,22 @@ export default {
         }
         let single = words[i]
         single.status = "uploading"
+        //此处等待一个个上传提交导入
         await word.importSingle({
           libId: this.libId,
           word: single.value
         }).then(res => {
           single.status = "ok"
         }).catch(err => {
+          // 导入失败设置失败原因
           this.importDialog.failedText = err.desc
           single.status = "failed"
         })
       }
     },
+    /**
+     * 设置打印页面内容
+     * */
     printPage() {
       let iframe = document.getElementById('iframe')
       let content = iframe.contentWindow.document.getElementById('content')
@@ -460,19 +510,42 @@ export default {
       content.innerHTML = printContent.innerHTML
       iframe.contentWindow.print()
     },
+    /**
+     * 表格选择行事件
+     * @param row 被选中的行
+     * */
     selectRow(row) {
       this.$refs['table'].toggleRowSelection(row)
     },
+    /**
+     * 表格选中项改变事件
+     * @param rows 新选中的行
+     * */
     selectionChange(rows) {
       this.selectItems = rows
     },
+    /**
+     * 分页选择事件
+     * @param cur 新选择的分页
+     * */
     currentChange(cur) {
       this.getWordList(null, cur, undefined)
     },
+    /**
+     * 分页页数量改变时间
+     * @param size 新选择的分页大小
+     * */
     sizeChange(size) {
       this.getWordList(null, undefined, size)
     },
+    /**
+     * 获取分页单词列表并设置到表格中
+     * @param w 单词，搜索时用
+     * @param current 第 n 页
+     * @param size 第 n 页的大小
+     * */
     getWordList(w, current, size) {
+      // 显示表格加载条
       this.tableLoading.show()
       word.getWordList({
         libId: this.libId,
@@ -482,19 +555,14 @@ export default {
       }).then(res => {
         this.tableData = res.data.list
         this.page.total = res.data.total
-        this.loadShow = false
+        // 关闭表格加载条
         this.tableLoading.close()
       })
     },
-    getOtherExplains(row) {
-      word.getOtherExplains({
-        wordId: row.id,
-        libId: this.libId,
-        pageNum: 1,
-        pageSize: 10
-      }).then(res => {
-      })
-    },
+    /**
+     * 封装释义显示内容
+     * @param row 表格当前行
+     * */
     generateExplain(row) {
       let explains = row.explain;
       let type = explains['type'].replace(".", '')
