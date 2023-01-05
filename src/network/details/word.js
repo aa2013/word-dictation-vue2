@@ -26,11 +26,18 @@ export function getRandomWordList(data) {
     })
 }
 
-export function getOtherExplains(data) {
+export function getExplains(data) {
     return request({
-        url: '/word/otherExplains',
+        url: '/word/explains',
         method: 'get',
         params: data,
-        animation: false
+    })
+}
+
+export function changeDefaultExplain(data) {
+    return request({
+        url: '/word/changeDefaultExplain',
+        method: 'get',
+        params: data,
     })
 }
