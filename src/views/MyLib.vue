@@ -11,7 +11,7 @@
                     <v-icon size="128" class="add-icon" :color="hover?'primary':''">mdi-plus</v-icon>
                 </v-card>
             </v-hover>
-            <lib-card @click.native="gotoDetail(item)" class="m10l" v-for="item in libs" :card="item"/>
+            <lib-card @click.native="gotoDetail(item)" class="m10l m10b" v-for="item in libs" :card="item"/>
         </div>
     </div>
 </template>

@@ -9,9 +9,9 @@ export function request(config) {
     const instance = axios.create({
         //根路径
         //开发时的后端请求路径
-        baseURL: 'http://localhost:8092/',
+        baseURL: 'http://localhost:8099/',
         //部署时候的路径
-        // baseURL: 'http://centos:8092',
+        // baseURL: 'https://api.coclyun.top/word/',
         timeout: 30 * 1000,
     })
 

@@ -16,3 +16,19 @@ export function getListCommon(data) {
         animation: false
     })
 }
+
+export function add(data) {
+    return request({
+        url: `/lib/add/${data}`,
+        method: 'post',
+        animation: false
+    })
+}
+
+export function remove(data) {
+    return request({
+        url: `/lib/remove/${data}`,
+        method: 'post',
+        animation: false
+    })
+}
