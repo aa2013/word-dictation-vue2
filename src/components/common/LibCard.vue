@@ -11,7 +11,7 @@
           <div style="height: 100%">
             <div style="height: 20%">创建者:{{ card.creatorName }}</div>
             <h2 style="height: 40%">{{ card.libName }}</h2>
-            <div style="height: 40%">{{ card.desc }}12132</div>
+            <div style="height: 40%">{{ card.desc }}</div>
           </div>
         </div>
         <div class="d-flex justify-space-between" style="height: 24px;line-height: 27px">

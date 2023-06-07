@@ -1,10 +1,18 @@
 import {request} from "../request";
 
-export function getListSelf(data) {
+export function create(data) {
+    return request({
+        url: '/lib/create',
+        method: 'post',
+        data: data,
+    })
+}
+
+
+export function getListSelf() {
     return request({
         url: '/lib/list/self',
         method: 'get',
-        params: data,
     })
 }
 

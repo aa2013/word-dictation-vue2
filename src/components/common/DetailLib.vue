@@ -5,6 +5,9 @@
       <div class="d-flex flex-column justify-space-between h100">
         <div style="margin-bottom: 10px" class="d-flex justify-space-between">
           <div class="d-flex align-center">
+            <v-btn icon color="primary" class="m5r" @click="gotoMyLib">
+              <v-icon>mdi-arrow-left-top</v-icon>
+            </v-btn>
             词库：{{ libName }}
 
             <v-text-field clearable class="m5h" v-model="search"
@@ -417,6 +420,9 @@ export default {
     }
   },
   methods: {
+    gotoMyLib(){
+      this.$router.push("/my-lib")
+    },
     addPlan() {
       this.planDialog.loading = true
       let data = {
