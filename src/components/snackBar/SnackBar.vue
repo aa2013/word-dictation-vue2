@@ -1,9 +1,11 @@
 <template>
     <v-app>
-        <v-snackbar v-model="visibility" :timeout="time" top right :color="color">
+        <v-snackbar v-model="visibility" :timeout="time"
+                    :left="left" :bottom="bottom" :top="top" :right="right" :color="color">
             {{ text }}
             <template v-slot:action="{ attrs }">
                 <v-btn
+                    v-show="btnShow"
                     :color="btnColor"
                     text
                     v-bind="attrs"
@@ -17,24 +19,49 @@
 </template>
 
 <script>
-    export default {
-        name: "SnackBar",
-        data() {
-            return {
-                visibility: false,
-                time: 3000,
-                color: 'primary',
-                text: "",
-                btnColor: 'white',
-                btnText: '确定',
-            }
+export default {
+    name: "SnackBar",
+    props: {
+        visibility: {
+            default: false
         },
-        methods:{
-            btnClick(){
-                this.onClick()
-            }
+        top: {
+            default: true
+        },
+        bottom: {
+            default: false
+        },
+        left: {
+            default: false
+        },
+        right: {
+            default: false
+        },
+        time: {
+            default: 3000
+        },
+        color: {
+            default: 'primary'
+        },
+        text: {
+            default: ""
+        },
+        btnColor: {
+            default: 'white'
+        },
+        btnText: {
+            default: '确定'
+        },
+        btnShow: {
+            default: false
+        },
+    },
+    methods: {
+        btnClick() {
+            this.onClick()
         }
     }
+}
 </script>
 
 <style scoped>

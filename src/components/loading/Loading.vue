@@ -15,42 +15,44 @@
 </template>
 
 <script>
-    export default {
-        name: "Loading",
-        props: {
-            size: {
-                default: 48
-            },
-            cancelText: {
-                default: '取消加载'
-            }
+export default {
+    name: "Loading",
+    props: {
+        size: {
+            default: 48
         },
-        data: () => ({
-            visibility: false,
-            cancelShow: false
-        }),
-        created() {
+        cancelText: {
+            default: '取消加载'
         },
-        methods: {
-            cancel() {
-                if (!this.cancelShow)
-                    return
-                this.close()
-            }
+        visibility: {
+            default: false
+        },
+        cancelShow: {
+            default: false
+        }
+    },
+    created() {
+    },
+    methods: {
+        cancel() {
+            if (!this.cancelShow)
+                return
+            this.close()
         }
     }
+}
 </script>
 
 <style scoped>
-    .btn-show {
-        opacity: 1;
-        cursor: pointer;
-        transition: all 0.3s linear;
-    }
+.btn-show {
+    opacity: 1;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
 
-    .btn-hidden {
-        opacity: 0;
-        cursor: default;
-        transition: all 0.3s linear;
-    }
+.btn-hidden {
+    opacity: 0;
+    cursor: default;
+    transition: all 0.3s linear;
+}
 </style>

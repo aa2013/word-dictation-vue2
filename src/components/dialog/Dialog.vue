@@ -12,8 +12,7 @@
                     </v-icon>
                     {{ title }}
                 </v-card-title>
-                <v-card-text class="text-h6">
-                    {{ content }}
+                <v-card-text class="text-h6" v-html="content">
                 </v-card-text>
                 <v-card-actions>
                     <v-btn
@@ -26,7 +25,7 @@
                     </v-btn>
                     <v-spacer></v-spacer>
                     <v-btn
-                        :color="rightColor"
+                        :color="leftColor"
                         text
                         style="margin-right: 10px"
                         @click="left"
@@ -35,7 +34,7 @@
                         {{ leftText }}
                     </v-btn>
                     <v-btn
-                        :color="leftColor"
+                        :color="rightColor"
                         text
                         @click="right"
                         v-show="rightShow"
@@ -71,7 +70,7 @@
                 default: 290
             },
             prevent: {
-                default: true
+                default: false
             },
             leftColor: {
                 default: 'primary'
@@ -104,7 +103,7 @@
                 iconColors: {
                     "success": 'primary',
                     "info": 'green',
-                    "warn": 'yellow',
+                    "warn": 'orange',
                     "danger": '#ff4081',
                 }
             }

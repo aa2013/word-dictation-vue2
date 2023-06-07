@@ -12,7 +12,7 @@ import Loading from '@/components/loading'
 import './assets/css/global.css'
 import './assets/css/scrollBar.css'
 // 教材http://www.goodkejian.com/list/3_1.htm
-Vue.prototype.showSnackBar = SnackBar.show
+Vue.prototype.snackBar = SnackBar
 Vue.prototype.dialog = MyDialog
 Vue.prototype.loading = Loading
 Vue.config.productionTip = false

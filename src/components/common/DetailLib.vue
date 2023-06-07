@@ -144,61 +144,8 @@
       </div>
     </v-card>
     <!--    预览弹窗-->
-    <v-dialog v-model="previewDialog.show" scrollable persistent width="230mm">
-      <v-card>
-        <v-card-title class="text-h5">
-          打印预览
-        </v-card-title>
-        <v-card-text class="scroll-bar">
-          <div id="printContent">
-            <div class="print-root">
-              <div v-for="i in repeatCount" :key="i">
-                <div class="m10b d-flex flex-wrap justify-start align-content-start">
-                  <print-word v-for="(item,i) in getPrintWordList()" :key="i" :word="item.word"
-                              :hidden-word="previewDialog.hideWord"
-                              :explain="item.explain['explanation']"/>
-                </div>
-                <hr color="#eee" class="m10v" v-if="i!==repeatCount"/>
-              </div>
-
-            </div>
-          </div>
-          <iframe id="iframe" v-show="false" :src="printUrl"></iframe>
-        </v-card-text>
-        <v-card-actions style="align-items: center">
-          <v-btn
-              color="green darken-1"
-              text
-              @click="">
-            保存此方案
-          </v-btn>
-          <v-checkbox v-model="previewDialog.random"
-                      hide-details
-                      style="margin: 0" label="乱序"/>
-          <v-checkbox v-model="previewDialog.hideWord"
-                      hide-details
-                      style="margin: 0" label="中译英"/>
-          <div class="m10l" style="width:80px;">
-            <v-text-field :value="previewDialog.repeat" dense @input="repeatChange"
-                          hide-spin-buttons hide-details type="number" outlined label="重复"
-                          suffix="次"/>
-          </div>
-          <v-spacer></v-spacer>
-          <v-btn
-              color="green darken-1"
-              text
-              @click="previewDialog.show = false">
-            关闭
-          </v-btn>
-          <v-btn
-              color="green darken-1"
-              text
-              @click="printPage">
-            打印
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <print-preview-dialog v-model="previewDialog" :print-word-list="printWordList"
+                          @showPlanDialog="showPlanDialog" show-plan-btn/>
     <!--    导入弹窗-->
     <v-dialog v-model="importDialog.show" scrollable persistent width="350">
       <v-card>
@@ -341,20 +288,39 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <!--    方案保存弹窗-->
+    <v-dialog v-model="planDialog.show" width="320">
+      <v-card>
+        <v-card-title class="text-h5">
+          保存此方案
+        </v-card-title>
+        <v-card-text style="padding: 20px" class="scroll-bar">
+          <v-text-field outlined dense hide-details class="m5b"
+                        label="起一个名字" v-model="planDialog.name"/>
+          方案保存后不支持修改
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn text color="green" @click="planDialog.show=false">取消</v-btn>
+          <v-btn text color="green" :loading="planDialog.loading" @click="addPlan">保存</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import * as word from '@/network/details/word'
+import * as plan from '@/network/details/plan'
 // 表格加载条
 import TableLoading from "@/components/tableLoading";
 // 单词显示打印组件
-import PrintWord from "@/components/common/PrintWord";
+import PrintPreviewDialog from "@/components/common/PrintPreviewDialog.vue";
 
 export default {
   name: "DetailLib",
   components: {
-    PrintWord
+    PrintPreviewDialog
   },
   props: {
     libId: {},
@@ -374,7 +340,7 @@ export default {
     // 打印预览弹窗相关
     previewDialog: {
       show: false,
-      hideWord: false,
+      ch2en: false,
       repeat: 1,
       random: false
     },
@@ -399,28 +365,35 @@ export default {
       show: false,
       detail: {},
       explains: []
+    },
+    //方案保存弹窗
+    planDialog: {
+      show: false,
+      name: '',
+      loading: false
     }
   }),
   computed: {
-    // 重复次数
-    repeatCount() {
-      let val = this.previewDialog.repeat
-      if (val === '') {
-        return 1
-      }
-      let cnt = parseInt(val)
-      return cnt <= 0 ? 1 : cnt
-    },
-    // 打印页面url
-    printUrl() {
-      return window.location.origin + '/print'
-    },
     // 表格选择项的数量
     getSelectItemsLen() {
       if (this.selectItems) {
         return this.selectItems.length
       }
       return 0
+    },
+
+    /**
+     * 待打印的单词列表
+     * */
+    printWordList() {
+      //数组结构
+      let temp = [...this.selectItems]
+      //如果要求乱序则打乱数组
+      if (this.previewDialog.random) {
+        temp.sort(() => 0.5 - Math.random())
+      }
+      console.log(123123)
+      return temp
     },
   },
   watch: {
@@ -458,6 +431,51 @@ export default {
     }
   },
   methods: {
+    addPlan() {
+      this.planDialog.loading = true
+      let data = {
+        name: this.planDialog.name,
+        libId: this.libId,
+        disorder: this.previewDialog.random,
+        repeat: this.previewDialog.repeat,
+        ch2en: this.previewDialog.ch2en,
+        words: this.selectItems.map(item => {
+          return {
+            word: item.word,
+            explain: item.explain.explanation
+          }
+        })
+      }
+      plan.add(data).then(res => {
+        if (res.data === true) {
+          this.snackBar.show("保存成功")
+          this.planDialog.show = false
+        } else {
+          this.snackBar.show({
+            color: "red",
+            text: "保存失败"
+          })
+        }
+      }).catch(err => {
+        this.snackBar.show({
+          color: "red",
+          text: err.desc
+        })
+      }).finally(() => {
+        this.planDialog.loading = false
+      })
+    },
+    showPlanDialog() {
+      if (this.selectItems.length === 0) {
+        this.snackBar.show({
+          color: "red",
+          text: "请先选择单词"
+        })
+        return
+      }
+      this.planDialog.name = ''
+      this.planDialog.show = true
+    },
     hasCustomDefaultExplain() {
       let explains = this.detailDialog.explains;
       for (let i = 0; i < explains.length; i++) {
@@ -519,35 +537,6 @@ export default {
       audio.play()
     },
     /**
-     * 获取打印的单词列表
-     * */
-    getPrintWordList() {
-      //数组结构
-      let temp = [...this.selectItems]
-      //如果要求乱序则打乱数组
-      if (this.previewDialog.random) {
-        temp.sort(() => 0.5 - Math.random())
-      }
-      return temp
-    },
-    /**
-     * 打印预览弹窗中的重复次数输入框监听
-     * @param val 输入内容
-     * */
-    repeatChange(val) {
-      if (!val) {
-        this.previewDialog.repeat = 1
-        return
-      }
-      let cnt = parseInt(val)
-      // 限制最大为重复50次
-      if (cnt > 50) {
-        this.previewDialog.repeat = 50
-      } else {
-        this.previewDialog.repeat = cnt <= 0 ? 1 : cnt
-      }
-    },
-    /**
      * 将单词id设置当做表格行的键
      * */
     getTableRowKey(row) {
@@ -596,16 +585,6 @@ export default {
           single.status = "failed"
         })
       }
-    },
-    /**
-     * 设置打印页面内容
-     * */
-    printPage() {
-      let iframe = document.getElementById('iframe')
-      let content = iframe.contentWindow.document.getElementById('content')
-      let printContent = document.getElementById('printContent');
-      content.innerHTML = printContent.innerHTML
-      iframe.contentWindow.print()
     },
     /**
      * 表格选择行事件

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import CommonLib from '../views/CommonLib.vue'
 import MyLib from '../views/MyLib.vue'
-import History from '../views/History.vue'
+import Plan from '../views/Plan.vue'
 import Root from '../views/Root.vue'
 import Login from '../views/Login.vue'
 import Pint from '../views/Print.vue'
@@ -36,11 +36,11 @@ const routes = [
                 },
             },
             {
-                path: '/history',
-                component: History,
+                path: '/plan',
+                component: Plan,
                 meta: {
                     icon: 'mdi-home-outline',
-                    title: '生成历史'
+                    title: '生成方案'
                 },
             },
         ]

@@ -4,7 +4,7 @@ import Vue from 'vue'
 //提示： 可参考视频资料：https://www.bilibili.com/video/BV15741177Eh?p=155
 export function request(config) {
     let vue = Vue.prototype;
-    config.animation = config.animation ?? true
+    config.animation = config.animation ?? false
     config.dialog = config.dialog ?? true
     const instance = axios.create({
         //根路径
