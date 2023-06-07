@@ -9,7 +9,7 @@
           <div class="print-root">
             <div v-for="i in repeatCount" :key="i">
               <div class="m10b d-flex flex-wrap justify-start align-content-start">
-                <print-word v-for="(item,i) in printWordList" :key="i" :word="item.word"
+                <print-word v-for="(item,i) in getWords()" :key="i" :word="item.word"
                             :hidden-word="value.ch2en"
                             :explain="item.explain['explanation']"/>
               </div>
@@ -22,9 +22,9 @@
       </v-card-text>
       <v-card-actions style="align-items: center">
         <v-btn v-if="showPlanBtn"
-            color="green darken-1"
-            text
-            @click="showPlanDialog">
+               color="green darken-1"
+               text
+               @click="showPlanDialog">
           保存此方案
         </v-btn>
         <v-checkbox v-model="value.random"
@@ -91,6 +91,13 @@ export default {
     },
   },
   methods: {
+    getWords() {
+      let temp = [...this.printWordList]
+      if (this.value.random) {
+        temp.sort(() => 0.5 - Math.random())
+      }
+      return temp
+    },
     showPlanDialog() {
       this.$emit("showPlanDialog")
     },
@@ -100,15 +107,15 @@ export default {
      * */
     repeatChange(val) {
       if (!val) {
-        this.previewDialog.repeat = 1
+        this.value.repeat = 1
         return
       }
       let cnt = parseInt(val)
       // 限制最大为重复50次
       if (cnt > 50) {
-        this.previewDialog.repeat = 50
+        this.value.repeat = 50
       } else {
-        this.previewDialog.repeat = cnt <= 0 ? 1 : cnt
+        this.value.repeat = cnt <= 0 ? 1 : cnt
       }
     },
     /**

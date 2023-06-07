@@ -15,3 +15,15 @@ export function getList(data) {
         params: data,
     })
 }
+export function getWords(planId) {
+    return request({
+        url: `/plan/words/${planId}`,
+        method: 'get',
+    })
+}
+export function remove(planId) {
+    return request({
+        url: `/plan/remove/${planId}`,
+        method: 'post',
+    })
+}

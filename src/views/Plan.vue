@@ -30,7 +30,7 @@
               width="100">
             <template slot-scope="scope">
               <v-icon color="primary">
-                {{scope.row.disorder?'mdi-check':'mdi-close'}}
+                {{ scope.row.disorder ? 'mdi-check' : 'mdi-close' }}
               </v-icon>
             </template>
           </el-table-column>
@@ -41,7 +41,7 @@
               width="100">
             <template slot-scope="scope">
               <v-icon color="primary">
-                {{scope.row.ch2en?'mdi-check':'mdi-close'}}
+                {{ scope.row.ch2en ? 'mdi-check' : 'mdi-close' }}
               </v-icon>
             </template>
           </el-table-column>
@@ -67,7 +67,8 @@
             <template slot-scope="scope">
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn icon color="primary" v-bind="attrs" v-on="on">
+                  <v-btn icon color="primary" v-bind="attrs" v-on="on"
+                         @click="showPrintDialog(scope.row)" :loading="scope.row.previewLoading">
                     <v-icon>mdi-printer</v-icon>
                   </v-btn>
                 </template>
@@ -76,7 +77,7 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn :disabled="scope.row.self" icon color="red" v-bind="attrs" v-on="on"
-                         @click="addOrRemove(scope.row)">
+                         @click="removePlan(scope.row)">
                     <v-icon>mdi-delete</v-icon>
                   </v-btn>
                 </template>
@@ -97,15 +98,19 @@
         </el-pagination>
       </div>
     </v-card>
+    <print-preview-dialog v-model="previewData" :print-word-list="printWordList"/>
   </div>
 </template>
 
 <script>
 import * as plan from '@/network/details/plan'
 import TableLoading from "@/components/tableLoading";
+// 单词显示打印组件
+import PrintPreviewDialog from "@/components/common/PrintPreviewDialog.vue";
 
 export default {
   name: "Plan",
+  components: {PrintPreviewDialog},
   data: () => ({
     // 表格数据
     tableData: [],
@@ -114,7 +119,14 @@ export default {
       size: 10,
       total: 0,
       current: 1
-    }
+    },
+    printWordList: [],
+    previewData: {
+      show: false,
+      ch2en: false,
+      repeat: 1,
+      random: false
+    },
   }),
   created() {
     this.initList()
@@ -129,7 +141,55 @@ export default {
     this.tableLoading.show()
   },
   methods: {
-    addOrRemove(row) {
+    removePlan(row) {
+      this.dialog.show({
+        title: "删除提示",
+        content: `是否删除 <span><strong>${row.name}</strong></span> 方案`,
+        type: "warn"
+      }).onRightClick(() => {
+        plan.remove(row.id).then(res => {
+          if (res.data === true) {
+            this.snackBar.show("删除成功")
+            this.initList()
+          } else {
+            this.snackBar.show({
+              text: "删除成功",
+              color: "red"
+            })
+          }
+        }).catch(err => {
+          this.snackBar.show({
+            text: err.desc,
+            color: "red"
+          })
+        })
+      })
+    },
+    showPrintDialog(row) {
+      row.previewLoading = true
+      this.previewData = {
+        show: false,
+        ch2en: row.ch2en,
+        repeat: row.repeat,
+        random: row.disorder
+      }
+      setTimeout(() => {
+        this.getWords(row, row.id)
+      }, 50)
+    },
+    getWords(row, planId) {
+      this.printWordList = []
+      plan.getWords(planId).then(res => {
+        this.printWordList = res.data.map(item => ({
+          word: item.word,
+          explain: {
+            explanation: item.explain
+          }
+        }))
+        this.previewData.show = true
+      }).finally(() => {
+        row.previewLoading = false
+      })
     },
     initList(pageNum, pageSize) {
       // 分页获取公共库列表
@@ -137,6 +197,7 @@ export default {
         pageNum: pageNum ?? this.page.current,
         pageSize: pageSize ?? this.page.size
       }).then(res => {
+        res.data.list.forEach(item => item.previewLoading = false)
         this.tableData = res.data.list
         this.page.total = res.data.total
       }).finally(() => {

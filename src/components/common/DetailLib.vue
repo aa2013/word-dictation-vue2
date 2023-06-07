@@ -144,7 +144,7 @@
       </div>
     </v-card>
     <!--    预览弹窗-->
-    <print-preview-dialog v-model="previewDialog" :print-word-list="printWordList"
+    <print-preview-dialog v-model="previewDialog" :print-word-list="selectItems"
                           @showPlanDialog="showPlanDialog" show-plan-btn/>
     <!--    导入弹窗-->
     <v-dialog v-model="importDialog.show" scrollable persistent width="350">
@@ -380,20 +380,6 @@ export default {
         return this.selectItems.length
       }
       return 0
-    },
-
-    /**
-     * 待打印的单词列表
-     * */
-    printWordList() {
-      //数组结构
-      let temp = [...this.selectItems]
-      //如果要求乱序则打乱数组
-      if (this.previewDialog.random) {
-        temp.sort(() => 0.5 - Math.random())
-      }
-      console.log(123123)
-      return temp
     },
   },
   watch: {
