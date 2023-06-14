@@ -26,6 +26,17 @@ const bar = function () {
         instance.visibility = true
         return getThis()
     }
+    instance.error = (text) => {
+        instance.autoClose = true
+        //使用默认数据覆盖
+        Object.assign(instance, defaultData)
+        instance.color = "red"
+        if (typeof text !== "object") {
+            instance.text = text
+        }
+        instance.visibility = true
+        return getThis()
+    }
     let click = () => {
     }
     let setClick = (action) => {
@@ -43,6 +54,7 @@ const bar = function () {
     }
     return {
         show: instance.show,
+        error: instance.error,
         onClick: setClick
     }
 }

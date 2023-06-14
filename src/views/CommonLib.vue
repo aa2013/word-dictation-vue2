@@ -110,21 +110,36 @@ export default {
       let remove = row.hasLib
       row.loading = true
       if (remove) {
-        lib.remove(row.id).then(res => {
-          if (res.data === true) {
-            row.hasLib = false
-          }
-        }).finally(() => {
-          //这个无效
+        this.dialog.show({
+          title: "移除提示",
+          type: "warn",
+          content: `是否移除词库 <span style="color: red">${row.libName}</span> ?`
+        }).onRightClick(() => {
+          lib.remove(row.id).then(res => {
+            if (res.data === true) {
+              row.hasLib = false
+              this.snackBar.show("移除成功")
+            } else {
+              this.snackBar.error("移除失败")
+            }
+          }).finally(() => {
+            row.loading = false
+          })
+        }).onLeftClick(() => {
+          row.loading = false
+        }).onOutsideClick(() => {
           row.loading = false
         })
+
       } else {
         lib.add(row.id).then(res => {
           if (res.data === true) {
             row.hasLib = true
+            this.snackBar.show("添加成功")
+          } else {
+            this.snackBar.error("添加失败")
           }
         }).finally(() => {
-          //这个无效
           row.loading = false
         })
       }

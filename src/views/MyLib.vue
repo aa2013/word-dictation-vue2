@@ -1,11 +1,11 @@
 <template>
   <div class="hw100">
     <!--    如果libId存在则显示该单词库详情-->
-    <div v-show="libId" class="hw100">
-      <detail-lib :lib-id="libId" :lib-name="libName" class="hw100"></detail-lib>
+    <div v-if="libId" class="hw100">
+      <detail-lib :id="libId" class="hw100"></detail-lib>
     </div>
     <!--    如果libId不存在则显示单词库列表-->
-    <div v-show="!libId" class="d-flex flex-wrap">
+    <div v-else class="d-flex flex-wrap">
       <v-hover v-slot="{ hover }">
         <v-card class="add-card" shaped :elevation="hover?2:0"
                 flat v-ripple transition="fade-transition"
@@ -87,8 +87,7 @@ export default {
   components: {LibCard, DetailLib},
   data: () => ({
     libs: [],
-    libId: false,
-    libName: '',
+    libId: null,
     createDialog: {
       show: false,
       data: {
@@ -105,15 +104,12 @@ export default {
     // 监听路由变化
     $route(now) {
       this.libId = this.$route.query.id
-      this.libName = this.$route.query.name
       if (!this.libId && now.path === '/my-lib' && this.libs.length === 0) {
         this.getLibs()
       }
     },
   },
   created() {
-    this.libId = this.$route.query.id
-    this.libName = this.$route.query.name
     // 如果libid不存在则假装我的单词库列表
     if (!this.libId) {
       this.getLibs()
@@ -128,7 +124,6 @@ export default {
         cover: this.createDialog.data.coverB64,
         common: this.createDialog.data.common,
       }
-      console.log(data)
       lib.create(data).then(res => {
         if (res.data === true) {
           this.snackBar.show("创建成功！")
@@ -181,14 +176,12 @@ export default {
      * @param lib 单词库对象
      * */
     gotoDetail(lib) {
-      let route = this.$router.resolve({
+      this.$router.push({
         path: '/my-lib',
         query: {
           id: lib.id,
-          name: lib.libName
         }
       })
-      window.open(route.href, '_blank')
     },
     /**
      * 获取库列表

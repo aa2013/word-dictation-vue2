@@ -8,10 +8,10 @@
             <v-btn icon color="primary" class="m5r" @click="gotoMyLib">
               <v-icon>mdi-arrow-left-top</v-icon>
             </v-btn>
-            词库：{{ libName }}
+            词库：{{ lib.libName }}
 
-            <v-text-field clearable class="m5h" v-model="search"
-                          @keydown.enter="searchWord" dense hide-details outlined label="输入单词..."/>
+            <v-text-field clearable class="m5h" v-model="search" @keydown.enter="searchWord"
+                          dense hide-details outlined label="输入单词..."/>
             <v-btn @click="searchWord" elevation="0" color="primary" class="m5r" style="margin-top: 2px">
               <v-icon left>mdi-magnify</v-icon>
               搜索
@@ -30,120 +30,114 @@
             <v-btn color="primary" outlined small @click="previewDialog.show=true">生成</v-btn>
           </div>
         </div>
-        <el-table ref="table"
-                  height="100%"
-                  :data="tableData"
-                  highlight-current-row
-                  @row-click="selectRow"
-                  :row-key="getTableRowKey"
-                  @selection-change="selectionChange"
-                  style="width: 100%">
-          <el-table-column
-              align="center"
-              type="selection"
-              :reserve-selection="true"
-              width="50">
-          </el-table-column>
-          <el-table-column
-              label="id"
-              prop="id"
-              align="center"
-              width="50">
-          </el-table-column>
-          <el-table-column
-              show-tooltip-when-overflow
-              label="单词"
-              align="center"
-              prop="word"
-              min-width="150">
-          </el-table-column>
-          <el-table-column
-              show-tooltip-when-overflow
-              label="释义"
-              align="center"
-              min-width="100">
-            <div slot-scope="scope">
-              {{ generateExplain(scope.row) }}
-            </div>
-          </el-table-column>
-          <el-table-column
-              label="美式音标"
-              align="center"
-              prop="usSymbol"
-              width="200">
-            <div slot-scope="scope">
-              [{{ scope.row['usSymbol'] }}]
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click.stop="playAudio(scope.row['usSymbolMp3'])" small icon color="primary"
-                         v-bind="attrs"
-                         v-on="on">
-                    <v-icon>mdi-volume-high</v-icon>
-                  </v-btn>
-                </template>
-                <span>播放</span>
-              </v-tooltip>
-            </div>
-          </el-table-column>
-          <el-table-column
-              label="英式音标"
-              align="center"
-              width="200">
-            <div slot-scope="scope">
-              [{{ scope.row['enSymbol'] }}]
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click.stop="playAudio(scope.row['enSymbolMp3'])" small icon color="primary"
-                         v-bind="attrs"
-                         v-on="on">
-                    <v-icon>mdi-volume-high</v-icon>
-                  </v-btn>
-                </template>
-                <span>播放</span>
-              </v-tooltip>
-            </div>
-          </el-table-column>
-          <el-table-column label="操作" width="150"
-                           align="center">
-            <div slot-scope="scope">
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click.stop="showDetailDialog(scope.row)" icon color="primary" v-bind="attrs"
-                         v-on="on">
-                    <v-icon>mdi-eye</v-icon>
-                  </v-btn>
-                </template>
-                <span>查看</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click.stop="" icon color="primary" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-btn>
-                </template>
-                <span>编辑</span>
-              </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn @click.stop="" icon color="red" v-bind="attrs" v-on="on">
-                    <v-icon>mdi-trash-can-outline</v-icon>
-                  </v-btn>
-                </template>
-                <span>删除</span>
-              </v-tooltip>
-            </div>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-            style="margin-top: 10px"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :current-page="page.current"
-            :page-sizes="[10,20,50,100,200]"
-            :page-size="page.size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="page.total">
-        </el-pagination>
+        <div class=" w100 d-flex flex-column overflow-hidden flex-grow-1">
+          <el-table ref="table"
+                    height="100%"
+                    :data="tableData"
+                    highlight-current-row
+                    @row-click="selectRow"
+                    :row-key="getTableRowKey"
+                    @selection-change="selectionChange"
+                    style="width: 100%">
+            <el-table-column
+                align="center"
+                type="selection"
+                :reserve-selection="true"
+                width="50">
+            </el-table-column>
+            <el-table-column
+                label="id"
+                prop="id"
+                align="center"
+                width="50">
+            </el-table-column>
+            <el-table-column
+                show-tooltip-when-overflow
+                label="单词"
+                align="center"
+                prop="word"
+                min-width="150">
+            </el-table-column>
+            <el-table-column
+                show-tooltip-when-overflow
+                label="释义"
+                align="center"
+                min-width="100">
+              <div slot-scope="scope">
+                {{ generateExplain(scope.row) }}
+              </div>
+            </el-table-column>
+            <el-table-column
+                label="美式音标"
+                align="center"
+                prop="usSymbol"
+                width="200">
+              <div slot-scope="scope">
+                [{{ scope.row['usSymbol'] }}]
+                <v-tooltip bottom v-if="scope.row['usSymbolMp3']">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click.stop="playAudio(scope.row['usSymbolMp3'])" small icon color="primary"
+                           v-bind="attrs"
+                           v-on="on">
+                      <v-icon>mdi-volume-high</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>播放</span>
+                </v-tooltip>
+              </div>
+            </el-table-column>
+            <el-table-column
+                label="英式音标"
+                align="center"
+                width="200">
+              <div slot-scope="scope">
+                [{{ scope.row['enSymbol'] }}]
+                <v-tooltip bottom v-if="scope.row['enSymbolMp3']">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click.stop="playAudio(scope.row['enSymbolMp3'])" small icon color="primary"
+                           v-bind="attrs"
+                           v-on="on">
+                      <v-icon>mdi-volume-high</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>播放</span>
+                </v-tooltip>
+              </div>
+            </el-table-column>
+            <el-table-column label="操作" width="150"
+                             align="center">
+              <div slot-scope="scope">
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click.stop="showDetailDialog(scope.row)" icon color="primary" v-bind="attrs"
+                           v-on="on">
+                      <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>查看</span>
+                </v-tooltip>
+                <v-tooltip bottom v-show="id.self">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn @click.stop="" icon color="red" v-bind="attrs" v-on="on">
+                      <v-icon>mdi-trash-can-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>删除</span>
+                </v-tooltip>
+              </div>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+              style="margin-top: 10px"
+              @size-change="sizeChange"
+              @current-change="currentChange"
+              :current-page="page.current"
+              :page-sizes="[10,20,50,100,200]"
+              :page-size="page.size"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="page.total">
+          </el-pagination>
+        </div>
       </div>
     </v-card>
     <!--    预览弹窗-->
@@ -247,7 +241,7 @@
         <v-card-text style="padding: 20px" class="scroll-bar">
           <h2 class="m5b">{{ detailDialog.detail['word'] }}</h2>
           <span>英式音标：[{{ detailDialog.detail['enSymbol'] }}]</span>
-          <v-tooltip class="m5h" bottom>
+          <v-tooltip class="m5h" bottom v-if="detailDialog.detail['enSymbolMp3']">
             <template v-slot:activator="{ on, attrs }">
               <v-btn @click.stop="playAudio(detailDialog.detail['enSymbolMp3'])" small icon
                      color="primary"
@@ -259,7 +253,7 @@
             <span>播放</span>
           </v-tooltip>
           <span>美式音标：[{{ detailDialog.detail['usSymbol'] }}]</span>
-          <v-tooltip bottom>
+          <v-tooltip bottom v-if="detailDialog.detail['usSymbolMp3']">
             <template v-slot:activator="{ on, attrs }">
               <v-btn @click.stop="playAudio(detailDialog.detail['usSymbolMp3'])" small icon
                      color="primary"
@@ -319,6 +313,7 @@ import * as plan from '@/network/details/plan'
 import TableLoading from "@/components/tableLoading";
 // 单词显示打印组件
 import PrintPreviewDialog from "@/components/common/PrintPreviewDialog.vue";
+import * as lib from "@/network/details/lib";
 
 export default {
   name: "DetailLib",
@@ -326,10 +321,10 @@ export default {
     PrintPreviewDialog
   },
   props: {
-    libId: {},
-    libName: '',
+    id: null
   },
   data: () => ({
+    lib: {},
     // 表格选择的项
     selectItems: [],
     // 表格数据
@@ -388,7 +383,8 @@ export default {
   watch: {
     // 监听路由变化
     $route() {
-      if (this.libId) {
+      if (this.id) {
+        this.getLibInfo()
         this.getWordList()
       }
     },
@@ -415,19 +411,20 @@ export default {
     let container = document.createElement('div')
     this.tableLoading = TableLoading.init(container)
     header.appendChild(container)
-    if (this.libId) {
+    if (this.id) {
+      this.getLibInfo()
       this.getWordList()
     }
   },
   methods: {
-    gotoMyLib(){
+    gotoMyLib() {
       this.$router.push("/my-lib")
     },
     addPlan() {
       this.planDialog.loading = true
       let data = {
         name: this.planDialog.name,
-        libId: this.libId,
+        libId: this.id,
         disorder: this.previewDialog.random,
         repeat: this.previewDialog.repeat,
         ch2en: this.previewDialog.ch2en,
@@ -482,14 +479,13 @@ export default {
       word.changeDefaultExplain({
         wordId: explain.wordId,
         defaultId: explain.id,
-        libId: this.libId
+        libId: this.id
       }).then(res => {
         if (res.data === true) {
           this.detailDialog.detail.explain = explain
           this.detailDialog.explains.forEach((item, j) => {
             item.customDefault = j === i;
           })
-          this.detailDialog.show = false
         }
       })
     },
@@ -498,7 +494,7 @@ export default {
       this.detailDialog.show = true
       word.getExplains({
         wordId: row.id,
-        libId: this.libId
+        libId: this.id
       }).then(res => {
         this.detailDialog.explains = res.data
       })
@@ -508,7 +504,7 @@ export default {
      * */
     randomGet() {
       word.getRandomWordList({
-        libId: this.libId,
+        libId: this.id,
         size: this.randomDialog.num
       }).then(res => {
         this.randomDialog.show = false
@@ -561,13 +557,14 @@ export default {
       let words = this.importDialog.words
       for (let i = 0; i < words.length; i++) {
         if (this.importDialog.cancel === true) {
-          break
+          this.getWordList()
+          return
         }
         let single = words[i]
         single.status = "uploading"
         //此处等待一个个上传提交导入
         await word.importSingle({
-          libId: this.libId,
+          libId: this.id,
           word: single.value
         }).then(res => {
           single.status = "ok"
@@ -577,6 +574,9 @@ export default {
           single.status = "failed"
         })
       }
+      this.snackBar.show("导入成功")
+      this.importDialog.show = false
+      this.getWordList()
     },
     /**
      * 表格选择行事件
@@ -606,6 +606,12 @@ export default {
     sizeChange(size) {
       this.getWordList(null, undefined, size)
     },
+    getLibInfo() {
+      lib.getLibInfo(this.id).then(res => {
+        this.lib = res.data
+        console.log(res.data)
+      })
+    },
     /**
      * 获取分页单词列表并设置到表格中
      * @param w 单词，搜索时用
@@ -616,7 +622,7 @@ export default {
       // 显示表格加载条
       this.tableLoading.show()
       word.getWordList({
-        libId: this.libId,
+        libId: this.id,
         word: w,
         pageNum: current ?? this.page.current,
         pageSize: size ?? this.page.size

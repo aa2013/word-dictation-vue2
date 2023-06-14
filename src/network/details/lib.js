@@ -16,6 +16,13 @@ export function getListSelf() {
     })
 }
 
+export function getLibInfo(libId) {
+    return request({
+        url: `/lib/info/${libId}`,
+        method: 'get',
+    })
+}
+
 export function getListCommon(data) {
     return request({
         url: '/lib/list/common',

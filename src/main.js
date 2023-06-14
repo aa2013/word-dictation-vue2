@@ -11,6 +11,7 @@ import Loading from '@/components/loading'
 // 引入全局css样式
 import './assets/css/global.css'
 import './assets/css/scrollBar.css'
+import './assets/css/element-table-scroll-bar.css'
 // 教材http://www.goodkejian.com/list/3_1.htm
 Vue.prototype.snackBar = SnackBar
 Vue.prototype.dialog = MyDialog

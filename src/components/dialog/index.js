@@ -24,6 +24,8 @@ const dialog = function () {
     }
     let neutralClickActon = () => {
     }
+    let outsideClick = () => {
+    }
     const show = (options) => {
         instance.autoClose = true
         //使用默认数据覆盖
@@ -42,6 +44,8 @@ const dialog = function () {
         rightClickActon = () => {
         }
         neutralClickActon = () => {
+        }
+        outsideClick = () => {
         }
     }
 
@@ -68,6 +72,12 @@ const dialog = function () {
         }
         return getThis()
     }
+    function onOutsideClick(action) {
+        if (typeof action === "function") {
+            outsideClick = action
+        }
+        return getThis()
+    }
 
     instance.leftClick = () => {
         leftClickActon(instance)
@@ -87,7 +97,13 @@ const dialog = function () {
             instance.show = false
         }
     }
-    return {show, setPrevent, onLeftClick, onRightClick, onNeutralClick,}
+    instance.outsideClick = () => {
+        outsideClick(instance)
+        if (instance.autoClose) {
+            instance.show = false
+        }
+    }
+    return {show, setPrevent, onLeftClick, onRightClick, onNeutralClick,onOutsideClick}
 }
 
 export default dialog()

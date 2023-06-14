@@ -23,7 +23,7 @@ const routes = [
                 path: '/common-lib',
                 component: CommonLib,
                 meta: {
-                    icon: 'mdi-home-outline',
+                    icon: 'mdi-book-open-outline',
                     title: '公开词库'
                 },
             },
@@ -31,7 +31,7 @@ const routes = [
                 path: '/my-lib',
                 component: MyLib,
                 meta: {
-                    icon: 'mdi-home-outline',
+                    icon: 'mdi-book-outline',
                     title: '我的词库'
                 },
             },
@@ -39,7 +39,7 @@ const routes = [
                 path: '/plan',
                 component: Plan,
                 meta: {
-                    icon: 'mdi-home-outline',
+                    icon: 'mdi-lightbulb-on-outline',
                     title: '生成方案'
                 },
             },
