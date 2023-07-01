@@ -116,7 +116,7 @@
                   </template>
                   <span>查看</span>
                 </v-tooltip>
-                <v-tooltip bottom v-show="id.self">
+                <v-tooltip bottom v-if="lib.self">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click.stop="" icon color="red" v-bind="attrs" v-on="on">
                       <v-icon>mdi-trash-can-outline</v-icon>
@@ -324,7 +324,8 @@ export default {
     id: null
   },
   data: () => ({
-    lib: {},
+    lib: {
+    },
     // 表格选择的项
     selectItems: [],
     // 表格数据
@@ -609,7 +610,6 @@ export default {
     getLibInfo() {
       lib.getLibInfo(this.id).then(res => {
         this.lib = res.data
-        console.log(res.data)
       })
     },
     /**

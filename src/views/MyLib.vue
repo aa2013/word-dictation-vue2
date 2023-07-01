@@ -14,12 +14,13 @@
         </v-card>
       </v-hover>
       <lib-card @click.native="gotoDetail(item)" class="m10l m10b"
+                @onRemoved="onCardRemoved(i)" @showEditDialog="showEditDialog(item)"
                 v-for="(item,i) in libs" :key="i" :card="item"/>
     </div>
     <v-dialog v-model="createDialog.show" scrollable persistent max-width="420px">
       <v-card>
         <v-card-title class="text-h5">
-          创建单词库
+          {{ createDialog.edit ? '编辑' : '创建' }}单词库
         </v-card-title>
         <v-card-text class="scroll-bar p5t">
           <div class="d-flex m5b">
@@ -28,8 +29,8 @@
                 <label class="cursor-pointer radius-8 upload-label"
                        v-ripple for="cover">
                   <v-img style="border-radius: 5px" ref="img" aspect-ratio="0.8"
-                         v-if="createDialog.data.cover || createDialog.data.coverB64"
-                         :src="createDialog.data.cover || createDialog.data.coverB64" alt="单词库图片"/>
+                         v-if="createDialog.data.coverB64 || createDialog.data.cover"
+                         :src="createDialog.data.coverB64 || createDialog.data.cover" alt="单词库图片"/>
                   <span v-else class="d-flex flex-column">
                     <v-icon size="48" :color="hover?'primary':''">
                       mdi-plus
@@ -69,7 +70,7 @@
               color="green darken-1"
               text :loading="createDialog.loading"
               @click="createLib">
-            创建！
+            {{ createDialog.edit ? '更新词库' : '创建' }}！
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -89,6 +90,7 @@ export default {
     libs: [],
     libId: null,
     createDialog: {
+      edit: false,
       show: false,
       data: {
         libName: "",
@@ -116,6 +118,14 @@ export default {
     }
   },
   methods: {
+    showEditDialog(item) {
+      this.createDialog.show = true
+      this.createDialog.edit = true
+      this.createDialog.data = {...item}
+    },
+    onCardRemoved(i) {
+      this.libs.splice(i, 1)
+    },
     createLib() {
       this.createDialog.loading = true
       let data = {
@@ -124,25 +134,36 @@ export default {
         cover: this.createDialog.data.coverB64,
         common: this.createDialog.data.common,
       }
-      lib.create(data).then(res => {
-        if (res.data === true) {
-          this.snackBar.show("创建成功！")
-          this.getLibs()
-          this.createDialog.show = false
-        } else {
-          this.snackBar.show({
-            color: "red",
-            text: "创建成功！"
-          })
-        }
-      }).catch(err => {
-        this.snackBar.show({
-          color: "red",
-          text: err.desc
+      if (this.createDialog.edit) {
+        data.id = this.createDialog.data.id
+        lib.update(data).then(res => {
+          if (res.data === true) {
+            this.snackBar.show("更新成功！")
+            this.getLibs()
+            this.createDialog.show = false
+          } else {
+            this.snackBar.error("更新失败")
+          }
+        }).catch(err => {
+          this.snackBar.error(err.desc)
+        }).finally(() => {
+          this.createDialog.loading = false
         })
-      }).finally(() => {
-        this.createDialog.loading = false
-      })
+      } else {
+        lib.create(data).then(res => {
+          if (res.data === true) {
+            this.snackBar.show("创建成功！")
+            this.getLibs()
+            this.createDialog.show = false
+          } else {
+            this.snackBar.error("创建失败")
+          }
+        }).catch(err => {
+          this.snackBar.error(err.desc)
+        }).finally(() => {
+          this.createDialog.loading = false
+        })
+      }
     },
     onCoverSelected(event) {
       const file = event.target.files[0]
@@ -163,6 +184,7 @@ export default {
     },
     showCreateDialog() {
       this.createDialog.show = true
+      this.createDialog.edit = false
       this.createDialog.data = {
         libName: "",
         desc: "",

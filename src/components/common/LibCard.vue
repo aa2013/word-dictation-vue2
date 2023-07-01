@@ -3,7 +3,8 @@
     <v-hover v-slot="{ hover }">
       <div>
         <div class="pos-absolute card-action-tag text-center radius-4 non-select cursor-pointer"
-             v-ripple @click.stop="showDialog"
+             v-ripple="card.self" @click.stop="showDialog"
+             :style="{background:card.self?'':'gray'}"
              :class="hover?'card-action-tag-hover':'card-action-tag-not-hover'">
           编辑
         </div>
@@ -63,6 +64,8 @@
 </template>
 
 <script>
+import * as lib from "@/network/details/lib"
+
 export default {
   name: "LibCard",
   props: {
@@ -81,7 +84,8 @@ export default {
   computed: {},
   methods: {
     showDialog() {
-      this.$emit("showDialog")
+      if (this.card.self)
+        this.$emit("showEditDialog")
     },
     showRemoveDialog() {
       let type = this.card.self ? '删除' : "移除"
@@ -89,9 +93,13 @@ export default {
                     是否确认${type}词库 <span style="color: red">${this.card.libName}</span> ?
                     <br/>
                   </span>`
-      if (this.card.self) {
+      if (this.card.self && this.card.common) {
         html += `<p style="font-size: 13px">
           公开且有其他用户的词库仅设为关闭状态。其他未添加用户无法使用。
+        </p>`
+      } else {
+        html += `<p style="font-size: 15px">
+            <span style="color: red">无法撤销！</span>
         </p>`
       }
       this.dialog.show({
@@ -99,7 +107,16 @@ export default {
         type: "warn",
         content: html
       }).onRightClick(() => {
-
+        lib.remove(this.card.id).then(res => {
+          if (res.data === true) {
+            this.snackBar.show("删除成功")
+            this.$emit("onRemoved")
+          } else {
+            this.snackBar.show("删除失败")
+          }
+        }).catch(err => {
+          this.snackBar.error(err.desc)
+        })
       })
     }
   }

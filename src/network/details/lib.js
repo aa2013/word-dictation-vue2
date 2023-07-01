@@ -7,6 +7,13 @@ export function create(data) {
         data: data,
     })
 }
+export function update(data) {
+    return request({
+        url: '/lib/update',
+        method: 'post',
+        data: data,
+    })
+}
 
 
 export function getListSelf() {
@@ -40,9 +47,9 @@ export function add(data) {
     })
 }
 
-export function remove(data) {
+export function remove(libId) {
     return request({
-        url: `/lib/remove/${data}`,
+        url: `/lib/remove/${libId}`,
         method: 'post',
         animation: false
     })
