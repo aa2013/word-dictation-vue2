@@ -40,7 +40,7 @@
               <v-tooltip bottom>
                 <template v-slot:activator="{ on, attrs }">
                   <div class="d-flex" style="margin-right: 5px" v-bind="attrs" v-on="on">
-                    <v-icon color="primary" class="m5r">mdi-contain</v-icon>
+                    <v-icon color="primary" class="m5r">mdi-alpha-n</v-icon>
                     <div>{{ card.cnt }}</div>
                   </div>
                 </template>
