@@ -1,11 +1,23 @@
 <template>
   <div>
-    <v-card elevation="1" class="hw100" style="padding: 10px">
-      <div class="d-flex flex-column justify-space-between" style="height: 100%">
+    <v-card elevation="1" class="hw100 d-flex flex-column" style="padding: 10px">
+      <div class="d-flex justify-space-between">
+        <div class="d-flex align-center m5l">
+          <v-text-field clearable class="m5h" @keydown.enter=""
+                        append-icon="mdi-magnify"
+                        dense hide-details outlined label="输入关键字..."/>
+        </div>
+        <div>
+          <v-btn @click="" icon elevation="0" color="primary" class="m5r" style="margin-top: 2px">
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </div>
+      </div>
+      <div class="d-flex flex-column justify-space-between flex-grow-1">
         <el-table ref="table"
                   :data="tableData"
                   highlight-current-row
-                  style="width: 100%">
+                  class="w100 flex-grow-1">
           <el-table-column
               label="id"
               prop="id"

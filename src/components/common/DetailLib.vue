@@ -324,8 +324,7 @@ export default {
     id: null
   },
   data: () => ({
-    lib: {
-    },
+    lib: {},
     // 表格选择的项
     selectItems: [],
     // 表格数据
@@ -556,6 +555,9 @@ export default {
       }
       this.importDialog.cancel = false
       let words = this.importDialog.words
+      if (words.length === 0) {
+        this.snackBar.error("单词列表不能为空")
+      }
       for (let i = 0; i < words.length; i++) {
         if (this.importDialog.cancel === true) {
           this.getWordList()
