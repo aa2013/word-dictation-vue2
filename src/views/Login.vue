@@ -223,7 +223,8 @@ export default {
         // 登录
         user.login({
           account: account,
-          password: pwd
+          password: pwd,
+          remember: this.remember
         }).then(res => {
           this.loginSuccess(res)
         }).finally(() => {
