@@ -53,3 +53,11 @@ export function resetPwd(data) {
         animation: false
     })
 }
+
+export function updatePwd(data) {
+    return request({
+        url: '/user/updatePwd',
+        method: 'post',
+        params: data
+    })
+}
