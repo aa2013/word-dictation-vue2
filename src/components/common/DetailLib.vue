@@ -73,7 +73,7 @@
                 prop="usSymbol"
                 width="200">
               <div slot-scope="scope">
-                [{{ scope.row['usSymbol'] }}]
+                {{ scope.row['usSymbol'] === '' ? '——' : scope.row['usSymbol'] }}
                 <v-tooltip bottom v-if="scope.row['usSymbolMp3']">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click.stop="playAudio(scope.row['usSymbolMp3'])" small icon color="primary"
@@ -91,7 +91,7 @@
                 align="center"
                 width="200">
               <div slot-scope="scope">
-                [{{ scope.row['enSymbol'] }}]
+                {{ scope.row['enSymbol'] === '' ? '——' : scope.row['enSymbol']}}
                 <v-tooltip bottom v-if="scope.row['enSymbolMp3']">
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn @click.stop="playAudio(scope.row['enSymbolMp3'])" small icon color="primary"
@@ -562,6 +562,7 @@ export default {
         this.snackBar.error("单词列表不能为空")
       }
       this.importDialog.loading = true;
+      let hasFailed = false;
       for (let i = 0; i < words.length; i++) {
         if (this.importDialog.cancel === true) {
           this.getWordList()
@@ -579,10 +580,15 @@ export default {
           // 导入失败设置失败原因
           this.importDialog.failedText = err.desc
           single.status = "failed"
+          hasFailed = true;
         })
       }
       this.snackBar.show("导入成功")
-      this.closeImportDialog()
+      if (!hasFailed) {
+        this.closeImportDialog()
+      } else {
+        this.importDialog.loading = false;
+      }
       this.getWordList()
     },
     /**
