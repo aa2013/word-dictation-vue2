@@ -200,6 +200,7 @@ export default {
      * */
     loginSuccess(res) {
       this.loggingIn = false
+      localStorage.setItem('wordUser', res.data.userName)
       this.$router.push("/")
     },
     /**

@@ -5,17 +5,51 @@
       <detail-lib :id="libId" class="hw100"></detail-lib>
     </div>
     <!--    如果libId不存在则显示单词库列表-->
-    <div v-else class="d-flex flex-wrap">
-      <v-hover v-slot="{ hover }">
-        <v-card class="add-card" shaped :elevation="hover?2:0"
-                flat v-ripple transition="fade-transition"
-                @click="showCreateDialog">
-          <v-icon size="128" class="add-icon" :color="hover?'primary':''">mdi-plus</v-icon>
+    <div v-else>
+      <div v-if="libs===null" class="d-flex flex-wrap">
+        <!--      <div v-if="false" class="d-flex flex-wrap">-->
+        <v-card shaped elevation="0" style="width: 333px;background: transparent" class="p10 m10r m10b"
+                v-for="i in 10" :key="i">
+          <div class="d-flex justify-start m10b">
+            <v-skeleton-loader type="image" :height="150" :width="125" class="mx-auto"/>
+            <div class="d-flex flex-column flex-grow-1 m10l justify-space-around">
+              <div v-for="i in 2" :key="i">
+                <v-skeleton-loader type="text" class="w100" v-for="i in 3" :key="i"/>
+              </div>
+            </div>
+          </div>
+          <v-skeleton-loader type="text" class="mx-auto"></v-skeleton-loader>
         </v-card>
-      </v-hover>
-      <lib-card @click.native="gotoDetail(item)" class="m10l m10b"
-                @onRemoved="onCardRemoved(i)" @showEditDialog="showEditDialog(item)"
-                v-for="(item,i) in libs" :key="i" :card="item"/>
+      </div>
+      <div v-else-if="libs.length===0">
+        <!--      <div v-else-if="true">-->
+        <div class="horizontal-center d-flex flex-column" style="width: 400px">
+          <img width="400" height="400" alt="什么都没有"
+               src="@/assets/img/no_result.png"/>
+          <div class="d-flex justify-space-around">
+            <v-btn color="primary" text @click="showCreateDialog">
+              <v-icon>mdi-plus</v-icon>
+              创建词库
+            </v-btn>
+            <v-btn color="primary" text @click="gotoCommonLib">
+              <v-icon>mdi-arrow-bottom-right</v-icon>
+              导入词库
+            </v-btn>
+          </div>
+        </div>
+      </div>
+      <div v-else class="d-flex flex-wrap">
+        <v-hover v-slot="{ hover }">
+          <v-card class="add-card" shaped :elevation="hover?2:0"
+                  flat v-ripple transition="fade-transition"
+                  @click="showCreateDialog">
+            <v-icon size="128" class="add-icon" :color="hover?'primary':''">mdi-plus</v-icon>
+          </v-card>
+        </v-hover>
+        <lib-card @click.native="gotoDetail(item)" class="m10l m10b"
+                  @onRemoved="onCardRemoved(i)" @showEditDialog="showEditDialog(item)"
+                  v-for="(item,i) in [...libs,...libs]" :key="i" :card="item"/>
+      </div>
     </div>
     <v-dialog v-model="createDialog.show" scrollable persistent max-width="420px">
       <v-card>
@@ -87,7 +121,7 @@ export default {
   name: "MyLib",
   components: {LibCard, DetailLib},
   data: () => ({
-    libs: [],
+    libs: null,
     createDialog: {
       edit: false,
       show: false,
@@ -109,8 +143,8 @@ export default {
       }
     },
   },
-  computed:{
-    libId(){
+  computed: {
+    libId() {
       return this.$route.query.id
     }
   },
@@ -184,6 +218,9 @@ export default {
         file.value = ''
       }
       reader.readAsDataURL(file)
+    },
+    gotoCommonLib() {
+      this.$router.push("/common-lib")
     },
     showCreateDialog() {
       this.createDialog.show = true

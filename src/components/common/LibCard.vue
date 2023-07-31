@@ -1,17 +1,19 @@
 <template>
-  <div class="pos-relative overflow-hidden">
+  <div class="pos-relative">
     <v-hover v-slot="{ hover }">
       <div>
-        <div class="pos-absolute card-action-tag text-center radius-4 non-select cursor-pointer"
-             v-ripple="card.self" @click.stop="showDialog"
-             :style="{background:card.self?'':'gray'}"
-             :class="hover?'card-action-tag-hover':'card-action-tag-not-hover'">
-          编辑
-        </div>
-        <div class="pos-absolute card-action-tag text-center radius-4 non-select cursor-pointer"
-             v-ripple @click.stop="showRemoveDialog"
-             :class="hover?'card-action-tag-hover':'card-action-tag-not-hover'">
-          {{ card.self ? '删除' : "移除" }}
+        <div class="hw100 pos-absolute overflow-hidden">
+          <div class="pos-absolute card-action-tag text-center radius-4 non-select cursor-pointer"
+               v-ripple="card.self" @click.stop="showDialog"
+               :style="{background:card.self?'':'gray'}"
+               :class="hover?'card-action-tag-hover':'card-action-tag-not-hover'">
+            编辑
+          </div>
+          <div class="pos-absolute card-action-tag text-center radius-4 non-select cursor-pointer"
+               v-ripple @click.stop="showRemoveDialog"
+               :class="hover?'card-action-tag-hover':'card-action-tag-not-hover'">
+            {{ card.self ? '删除' : "移除" }}
+          </div>
         </div>
         <v-card shaped :elevation="hover?2:0" flat v-ripple transition="fade-transition"
                 class="card-container d-flex flex-column">

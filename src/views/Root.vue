@@ -58,6 +58,9 @@
           <v-list-item-content class="justify-center">
             <div class="mx-auto text-center " style="min-width: 160px">
               <div class="d-flex flex-column" style="padding: 0 5px">
+                <div style="line-height: 30px">
+                  用户: {{ userName ?? '未登录' }}
+                </div>
                 <v-btn color="primary" text @click="showUpdatePwdDialog">
                   <v-icon left small>
                     mdi-key-outline
@@ -116,6 +119,7 @@ import * as user from '@/network/details/user'
 export default {
   name: "Root",
   data: () => ({
+    userName: localStorage.getItem('wordUser'),
     //忘记密码弹窗
     updatePwdDialog: {
       show: false,
