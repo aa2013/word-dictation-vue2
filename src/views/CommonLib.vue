@@ -3,12 +3,13 @@
     <v-card elevation="1" class="hw100 d-flex flex-column" style="padding: 10px">
       <div class="d-flex justify-space-between">
         <div class="d-flex align-center m5l">
-          <v-text-field clearable class="m5h" @keydown.enter=""
-                        append-icon="mdi-magnify"
-                        dense hide-details outlined label="输入关键字..."/>
+          <v-text-field clearable class="m5h" @keydown.native.enter="initCommonList()"
+                        v-model="search"
+                        append-icon="mdi-magnify" label="搜索" prepend-inner-icon="mdi-book-open-outline"
+                        dense hide-details outlined placeholder="输入关键字..."/>
         </div>
         <div>
-          <v-btn @click="()=>initCommonList()" icon elevation="0" color="primary" class="m5r" style="margin-top: 2px">
+          <v-btn @click="initCommonList()" icon elevation="0" color="primary" class="m5r" style="margin-top: 2px">
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
         </div>
@@ -97,6 +98,7 @@ export default {
   data: () => ({
     // 表格数据
     tableData: [],
+    search: '',
     //分页相关
     page: {
       size: 10,
@@ -160,7 +162,8 @@ export default {
       // 分页获取公共库列表
       lib.getListCommon({
         pageNum: pageNum ?? this.page.current,
-        pageSize: pageSize ?? this.page.size
+        pageSize: pageSize ?? this.page.size,
+        search: this.search
       }).then(res => {
         res.data.list.forEach(v => {
           v.loading = false

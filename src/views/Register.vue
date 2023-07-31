@@ -3,8 +3,8 @@
     <div class="login-bg">
       <div class="login-container">
         <v-card elevation="2" class="login-card">
-          <img src="../assets/img/logo.png" alt="" class="login-logo">
-          <p class="login-card-title">用户注册</p>
+          <img src="../assets/img/logo.png" alt="logo" class="horizontal-center d-block" height="48" width="48">
+          <p class="login-card-title m10t">用户注册</p>
           <v-text-field v-model="account" label="邮箱" dense
                         prepend-inner-icon="mdi-account" outlined/>
           <v-text-field v-model="password" type="password"
@@ -37,8 +37,6 @@
 
         </v-card>
         <p class="copy-right">
-          Copyright © UniversalLogin, All Rights Reserved.
-          Email : 1111@qq.com WeChat: vx2321345
         </p>
       </div>
     </div>
@@ -186,11 +184,6 @@ export default {
       width: 100%;
       /*上 左右 下*/
       padding: 10px 20px 5px;
-
-      .login-logo {
-        display: block;
-        margin: 0 auto 24px;
-      }
 
       .login-card-title {
         margin-bottom: 24px;

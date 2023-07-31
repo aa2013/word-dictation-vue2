@@ -6,17 +6,17 @@ export function request(config) {
     let vue = Vue.prototype;
     config.animation = config.animation ?? false
     config.dialog = config.dialog ?? true
+    //开发时的后端请求路径
+    const devUrl = "http://localhost:8099/"
+    //部署时候的路径
+    const proUrl = "https://api.coclyun.top/word/"
     const instance = axios.create({
         //根路径
-        //开发时的后端请求路径
-        baseURL: 'http://localhost:8099/',
-        //部署时候的路径
-        // baseURL: 'https://api.coclyun.top/word/',
+        baseURL: Vue.prototype.isDev ? devUrl : proUrl,
         timeout: 30 * 1000,
     })
 
     //开始加载动画
-
     let loading;
 
     function startLoading() {

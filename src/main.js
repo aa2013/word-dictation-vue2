@@ -16,6 +16,8 @@ import './assets/css/element-table-scroll-bar.css'
 Vue.prototype.snackBar = SnackBar
 Vue.prototype.dialog = MyDialog
 Vue.prototype.loading = Loading
+Vue.prototype.isDev = process.env.NODE_ENV === 'development'
+Vue.prototype.isPro = process.env.NODE_ENV === 'production'
 Vue.config.productionTip = false
 new Vue({
     router,

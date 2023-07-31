@@ -11,11 +11,9 @@
             词库：{{ lib.libName }}
 
             <v-text-field clearable class="m5h" v-model="search" @keydown.enter="searchWord"
-                          dense hide-details outlined label="输入单词..."/>
-            <v-btn @click="searchWord" elevation="0" color="primary" class="m5r" style="margin-top: 2px">
-              <v-icon left>mdi-magnify</v-icon>
-              搜索
-            </v-btn>
+                          label="搜索" prepend-inner-icon="mdi-alphabetical"
+                          append-icon="mdi-magnify"
+                          dense hide-details outlined placeholder="输入单词..."/>
             <v-btn elevation="0" color="primary" style="margin-top: 2px" @click="importDialog.show=true">
               导入
               <v-icon right>mdi-plus</v-icon>

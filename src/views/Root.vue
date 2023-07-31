@@ -3,7 +3,7 @@
     <v-navigation-drawer v-model="drawer" app>
       <div style="height: 64px" class="nav-title d-flex justify-center">
         <img src="../assets/img/logo.png" alt="" width="44" height="44">
-        <span>单词本</span>
+        <span><em>单词本</em></span>
       </div>
       <v-divider/>
       <v-list shaped nav>
