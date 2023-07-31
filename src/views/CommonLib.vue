@@ -8,7 +8,7 @@
                         dense hide-details outlined label="输入关键字..."/>
         </div>
         <div>
-          <v-btn @click="" icon elevation="0" color="primary" class="m5r" style="margin-top: 2px">
+          <v-btn @click="()=>initCommonList()" icon elevation="0" color="primary" class="m5r" style="margin-top: 2px">
             <v-icon>mdi-refresh</v-icon>
           </v-btn>
         </div>

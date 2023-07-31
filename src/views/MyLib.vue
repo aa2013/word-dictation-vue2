@@ -88,7 +88,6 @@ export default {
   components: {LibCard, DetailLib},
   data: () => ({
     libs: [],
-    libId: null,
     createDialog: {
       edit: false,
       show: false,
@@ -105,14 +104,18 @@ export default {
   watch: {
     // 监听路由变化
     $route(now) {
-      this.libId = this.$route.query.id
       if (!this.libId && now.path === '/my-lib' && this.libs.length === 0) {
         this.getLibs()
       }
     },
   },
+  computed:{
+    libId(){
+      return this.$route.query.id
+    }
+  },
   created() {
-    // 如果libid不存在则假装我的单词库列表
+    // 如果libid不存在则加载我的单词库列表
     if (!this.libId) {
       this.getLibs()
     }

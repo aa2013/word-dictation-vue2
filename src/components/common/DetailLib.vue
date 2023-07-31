@@ -149,9 +149,9 @@
         <v-card-title class="text-h5">
           单词导入
         </v-card-title>
-        <div class="p10h overflow-auto" style="height: 300px;">
+        <div class="p10h overflow-auto scroll-bar" style="height: 300px;">
           <v-textarea rows="10" v-model="importDialog.content"
-                      v-show="!importDialog.previewShow"
+                      v-show="!importDialog.previewShow" class="scroll-bar"
                       label="一行一个" hide-details/>
           <div v-show="importDialog.previewShow" class="text-center">
             <img v-show="importDialog.words.length===0" width="200" height="200"
@@ -200,6 +200,7 @@
           <v-btn
               color="green darken-1"
               text
+              :loading="importDialog.loading"
               @click="importDialogSubmit">
             {{ importDialog.previewShow ? "导入" : "预览" }}
           </v-btn>
@@ -348,6 +349,7 @@ export default {
       previewShow: false,
       content: "",
       words: [],
+      loading: false,
       cancel: false,
       failedText: ''
     },
@@ -543,6 +545,7 @@ export default {
       this.importDialog.show = false
       this.importDialog.content = ''
       this.importDialog.previewShow = false
+      this.importDialog.loading = false;
       this.importDialog.cancel = true
     },
     /**
@@ -558,6 +561,7 @@ export default {
       if (words.length === 0) {
         this.snackBar.error("单词列表不能为空")
       }
+      this.importDialog.loading = true;
       for (let i = 0; i < words.length; i++) {
         if (this.importDialog.cancel === true) {
           this.getWordList()
@@ -578,7 +582,7 @@ export default {
         })
       }
       this.snackBar.show("导入成功")
-      this.importDialog.show = false
+      this.closeImportDialog()
       this.getWordList()
     },
     /**

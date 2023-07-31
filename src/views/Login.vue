@@ -230,6 +230,8 @@ export default {
         }).finally(() => {
           this.loggingIn = false
         })
+      }).finally(() => {
+        this.loggingIn = false
       })
     },
   }

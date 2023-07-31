@@ -48,27 +48,39 @@ const routes = [
     {
         path: '/',
         name: '',
-        redirect: '/common-lib'
+        redirect: '/common-lib',
+        meta: {
+            title: '跳转中...'
+        },
     },
     {
         path: '/login',
         name: 'login',
-        component: Login
+        component: Login,
+        meta: {
+            title: '用户登录'
+        },
     },
     {
         path: '/register',
         name: 'register',
-        component: Register
+        component: Register,
+        meta: {
+            title: '用户注册'
+        },
     },
     {
         path: '/print',
         name: 'print',
-        component: Print
+        component: Print,
+        meta: {
+            title: '打印'
+        },
     },
 ]
 
 const router = new VueRouter({
-    mode: 'history',
+    // mode: 'history',
     base: process.env.BASE_URL,
     routes
 })
