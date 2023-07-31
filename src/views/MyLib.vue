@@ -48,7 +48,7 @@
         </v-hover>
         <lib-card @click.native="gotoDetail(item)" class="m10l m10b"
                   @onRemoved="onCardRemoved(i)" @showEditDialog="showEditDialog(item)"
-                  v-for="(item,i) in [...libs,...libs]" :key="i" :card="item"/>
+                  v-for="(item,i) in libs" :key="i" :card="item"/>
       </div>
     </div>
     <v-dialog v-model="createDialog.show" scrollable persistent max-width="420px">
