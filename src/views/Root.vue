@@ -1,38 +1,53 @@
 <template>
   <div id="inspire" style=" width:100%;height:100%;">
     <v-navigation-drawer v-model="drawer" app>
-      <div style="height: 64px" class="nav-title d-flex justify-center">
-        <img src="../assets/img/logo.png" alt="" width="44" height="44">
-        <span><em>单词本</em></span>
-      </div>
-      <v-divider/>
-      <v-list shaped nav>
-        <v-list-item-group mandatory color="primary" :value="firstSelected">
-          <template v-for="(item,i) in menu">
-            <v-list-item link v-if="!item.children" @click="gotoPage(item,item.path)">
-              <v-list-item-icon>
-                <v-icon>{{ item.meta.icon }}</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>{{ item.meta.title }}</v-list-item-title>
-            </v-list-item>
-            <v-list-group v-else :prepend-icon="item.icon"
-                          :value="curFirst===i">
-              <template v-slot:activator>
-                <v-list-item-content>
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item-content>
-              </template>
-              <v-list-item-group :value="curFirst===i?secondSelected:undefined">
-                <v-list-item v-for="(child,j) in item.children"
-                             @click="gotoPage(child,child.path)">
-                  <v-list-item-icon/>
-                  <v-list-item-title>{{ child.title }}</v-list-item-title>
+      <div class="d-flex flex-column h100">
+        <div>
+          <div style="height: 64px" class="nav-title d-flex justify-center">
+            <img src="../assets/img/logo.png" alt="" width="44" height="44">
+            <span><em>单词本</em></span>
+          </div>
+          <v-divider/>
+        </div>
+        <div class="d-flex flex-column justify-space-between flex-grow-1">
+          <v-list shaped nav>
+            <v-list-item-group mandatory color="primary" :value="firstSelected">
+              <template v-for="(item,i) in menu">
+                <v-list-item link v-if="!item.children" @click="gotoPage(item,item.path)">
+                  <v-list-item-icon>
+                    <v-icon>{{ item.meta.icon }}</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-title>{{ item.meta.title }}</v-list-item-title>
                 </v-list-item>
-              </v-list-item-group>
-            </v-list-group>
-          </template>
-        </v-list-item-group>
-      </v-list>
+                <v-list-group v-else :prepend-icon="item.icon"
+                              :value="curFirst===i">
+                  <template v-slot:activator>
+                    <v-list-item-content>
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                  <v-list-item-group :value="curFirst===i?secondSelected:undefined">
+                    <v-list-item v-for="(child,j) in item.children"
+                                 @click="gotoPage(child,child.path)">
+                      <v-list-item-icon/>
+                      <v-list-item-title>{{ child.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list-item-group>
+                </v-list-group>
+              </template>
+            </v-list-item-group>
+          </v-list>
+          <div>
+            <v-divider/>
+            <div class="p10">
+              <div class="text-center text-caption">
+                <v-icon size="18">mdi-at</v-icon>
+                2439827731@qq.com
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </v-navigation-drawer>
 
     <v-app-bar app style="background: white">

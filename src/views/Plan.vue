@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-card elevation="1" class="hw100" style="padding: 10px">
-      <div class="d-flex justify-space-between">
+    <v-card elevation="1" class="hw100 d-flex flex-column" style="padding: 10px">
+      <div class="d-flex justify-space-between scroll-bar overflow-x-auto">
         <div class="d-flex align-center m5l">
           <v-text-field clearable class="m5h" @keydown.enter="initList()"
                         v-model="search"
@@ -14,11 +14,11 @@
           </v-btn>
         </div>
       </div>
-      <div class="d-flex flex-column justify-space-between" style="height: 100%">
+      <div class="d-flex flex-column flex-grow-1 justify-space-between">
         <el-table ref="table"
+                  class="flex-grow-1 w100"
                   :data="tableData"
-                  highlight-current-row
-                  style="width: 100%">
+                  highlight-current-row>
           <el-table-column
               label="id"
               prop="id"
@@ -99,16 +99,18 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-            style="margin-top: 10px"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :current-page="page.current"
-            :page-sizes="[10,20,30,40]"
-            :page-size="page.size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="page.total">
-        </el-pagination>
+        <div class="scroll-bar overflow-x-auto">
+          <el-pagination
+              class="w100"
+              @size-change="sizeChange"
+              @current-change="currentChange"
+              :current-page="page.current"
+              :page-sizes="[10,20,30,40]"
+              :page-size="page.size"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="page.total">
+          </el-pagination>
+        </div>
       </div>
     </v-card>
     <print-preview-dialog v-model="previewData" :print-word-list="printWordList"/>

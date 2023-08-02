@@ -1,130 +1,128 @@
 <template>
   <div>
     <!--    主表格-->
-    <v-card elevation="1" class="hw100" style="padding: 10px">
-      <div class="d-flex flex-column justify-space-between h100">
-        <div style="margin-bottom: 10px" class="d-flex justify-space-between">
-          <div class="d-flex align-center">
-            <v-btn icon color="primary" class="m5r" @click="gotoMyLib">
-              <v-icon>mdi-arrow-left-top</v-icon>
-            </v-btn>
-            词库：{{ lib.libName }}
-
-            <v-text-field clearable class="m5h" v-model="search" @keydown.enter="searchWord"
-                          label="搜索" prepend-inner-icon="mdi-alphabetical"
-                          append-icon="mdi-magnify"
-                          dense hide-details outlined placeholder="输入单词..."/>
-            <v-btn elevation="0" color="primary" style="margin-top: 2px" @click="importDialog.show=true">
-              导入
-              <v-icon right>mdi-plus</v-icon>
-            </v-btn>
-          </div>
-          <div>
-            已选：{{ getSelectItemsLen }}个，
-            随机选择
-            <v-btn @click="randomDialog.show=true" icon color="primary">
-              <v-icon>mdi-repeat</v-icon>
-            </v-btn>
-            <v-btn color="primary" outlined small @click="previewDialog.show=true">生成</v-btn>
-          </div>
+    <v-card elevation="1" class="hw100 d-flex flex-column justify-space-between" style="padding: 10px">
+      <div style="margin-bottom: 10px" class="d-flex justify-space-between overflow-x-auto scroll-bar">
+        <div class="d-flex align-center" style="min-width: 500px">
+          <v-btn icon color="primary" class="m5r" @click="gotoMyLib">
+            <v-icon>mdi-arrow-left-top</v-icon>
+          </v-btn>
+          <span>词库：{{ lib.libName }}</span>
+          <v-text-field clearable class="m5h" v-model="search" @keydown.enter="searchWord"
+                        label="搜索" prepend-inner-icon="mdi-alphabetical"
+                        append-icon="mdi-magnify"
+                        dense hide-details outlined placeholder="输入单词..."/>
+          <v-btn elevation="0" color="primary" style="margin-top: 2px" @click="importDialog.show=true">
+            导入
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
         </div>
-        <div class=" w100 d-flex flex-column overflow-hidden flex-grow-1">
-          <el-table ref="table"
-                    height="100%"
-                    :data="tableData"
-                    highlight-current-row
-                    @row-click="selectRow"
-                    :row-key="getTableRowKey"
-                    @selection-change="selectionChange"
-                    style="width: 100%">
-            <el-table-column
-                align="center"
-                type="selection"
-                :reserve-selection="true"
-                width="50">
-            </el-table-column>
-            <el-table-column
-                label="id"
-                prop="id"
-                align="center"
-                width="50">
-            </el-table-column>
-            <el-table-column
-                show-tooltip-when-overflow
-                label="单词"
-                align="center"
-                prop="word"
-                min-width="150">
-            </el-table-column>
-            <el-table-column
-                show-tooltip-when-overflow
-                label="释义"
-                align="center"
-                min-width="100">
-              <div slot-scope="scope">
-                {{ generateExplain(scope.row) }}
-              </div>
-            </el-table-column>
-            <el-table-column
-                label="美式音标"
-                align="center"
-                prop="usSymbol"
-                width="200">
-              <div slot-scope="scope">
-                {{ scope.row['usSymbol'] === '' ? '——' : scope.row['usSymbol'] }}
-                <v-tooltip bottom v-if="scope.row['usSymbolMp3']">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click.stop="playAudio(scope.row['usSymbolMp3'])" small icon color="primary"
-                           v-bind="attrs"
-                           v-on="on">
-                      <v-icon>mdi-volume-high</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>播放</span>
-                </v-tooltip>
-              </div>
-            </el-table-column>
-            <el-table-column
-                label="英式音标"
-                align="center"
-                width="200">
-              <div slot-scope="scope">
-                {{ scope.row['enSymbol'] === '' ? '——' : scope.row['enSymbol']}}
-                <v-tooltip bottom v-if="scope.row['enSymbolMp3']">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click.stop="playAudio(scope.row['enSymbolMp3'])" small icon color="primary"
-                           v-bind="attrs"
-                           v-on="on">
-                      <v-icon>mdi-volume-high</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>播放</span>
-                </v-tooltip>
-              </div>
-            </el-table-column>
-            <el-table-column label="操作" width="150"
-                             align="center">
-              <div slot-scope="scope">
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click.stop="showDetailDialog(scope.row)" icon color="primary" v-bind="attrs"
-                           v-on="on">
-                      <v-icon>mdi-eye</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>查看</span>
-                </v-tooltip>
-                <v-tooltip bottom v-if="lib.self">
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn @click.stop="" icon color="red" v-bind="attrs" v-on="on">
-                      <v-icon>mdi-trash-can-outline</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>删除</span>
-                </v-tooltip>
-              </div>
-            </el-table-column>
-          </el-table>
+        <div class="p10l" style="min-width: 170px">
+          已选：{{ getSelectItemsLen }}
+          <v-btn @click="randomDialog.show=true" icon color="primary">
+            <v-icon>mdi-repeat</v-icon>
+          </v-btn>
+          <v-btn color="primary" outlined small @click="previewDialog.show=true">生成</v-btn>
+        </div>
+      </div>
+      <div class="w100 d-flex flex-column overflow-hidden flex-grow-1">
+        <el-table ref="table"
+                  height="100%"
+                  :data="tableData"
+                  highlight-current-row
+                  @row-click="selectRow"
+                  :row-key="getTableRowKey"
+                  @selection-change="selectionChange"
+                  style="width: 100%">
+          <el-table-column
+              align="center"
+              type="selection"
+              :reserve-selection="true"
+              width="50">
+          </el-table-column>
+          <el-table-column
+              label="id"
+              prop="id"
+              align="center"
+              width="50">
+          </el-table-column>
+          <el-table-column
+              show-tooltip-when-overflow
+              label="单词"
+              align="center"
+              prop="word"
+              min-width="150">
+          </el-table-column>
+          <el-table-column
+              show-tooltip-when-overflow
+              label="释义"
+              align="center"
+              min-width="100">
+            <div slot-scope="scope">
+              {{ generateExplain(scope.row) }}
+            </div>
+          </el-table-column>
+          <el-table-column
+              label="美式音标"
+              align="center"
+              prop="usSymbol"
+              width="200">
+            <div slot-scope="scope">
+              {{ scope.row['usSymbol'] === '' ? '——' : scope.row['usSymbol'] }}
+              <v-tooltip bottom v-if="scope.row['usSymbolMp3']">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn @click.stop="playAudio(scope.row['usSymbolMp3'])" small icon color="primary"
+                         v-bind="attrs"
+                         v-on="on">
+                    <v-icon>mdi-volume-high</v-icon>
+                  </v-btn>
+                </template>
+                <span>播放</span>
+              </v-tooltip>
+            </div>
+          </el-table-column>
+          <el-table-column
+              label="英式音标"
+              align="center"
+              width="200">
+            <div slot-scope="scope">
+              {{ scope.row['enSymbol'] === '' ? '——' : scope.row['enSymbol'] }}
+              <v-tooltip bottom v-if="scope.row['enSymbolMp3']">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn @click.stop="playAudio(scope.row['enSymbolMp3'])" small icon color="primary"
+                         v-bind="attrs"
+                         v-on="on">
+                    <v-icon>mdi-volume-high</v-icon>
+                  </v-btn>
+                </template>
+                <span>播放</span>
+              </v-tooltip>
+            </div>
+          </el-table-column>
+          <el-table-column label="操作" width="150"
+                           align="center">
+            <div slot-scope="scope">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn @click.stop="showDetailDialog(scope.row)" icon color="primary" v-bind="attrs"
+                         v-on="on">
+                    <v-icon>mdi-eye</v-icon>
+                  </v-btn>
+                </template>
+                <span>查看</span>
+              </v-tooltip>
+              <v-tooltip bottom v-if="lib.self">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn @click.stop="" icon color="red" v-bind="attrs" v-on="on">
+                    <v-icon>mdi-trash-can-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>删除</span>
+              </v-tooltip>
+            </div>
+          </el-table-column>
+        </el-table>
+        <div class="w100 overflow-x-auto">
           <el-pagination
               style="margin-top: 10px"
               @size-change="sizeChange"

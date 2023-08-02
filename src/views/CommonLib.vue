@@ -74,16 +74,18 @@
             </v-tooltip>
           </el-table-column>
         </el-table>
-        <el-pagination
-            style="margin-top: 10px"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :current-page="page.current"
-            :page-sizes="[10,20,30,40]"
-            :page-size="page.size"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="page.total">
-        </el-pagination>
+        <div class="w100 overflow-x-auto">
+          <el-pagination
+              style="margin-top: 10px"
+              @size-change="sizeChange"
+              @current-change="currentChange"
+              :current-page="page.current"
+              :page-sizes="[10,20,30,40]"
+              :page-size="page.size"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="page.total">
+          </el-pagination>
+        </div>
       </div>
     </v-card>
   </div>

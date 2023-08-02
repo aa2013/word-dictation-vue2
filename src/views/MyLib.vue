@@ -5,10 +5,10 @@
       <detail-lib :id="libId" class="hw100"></detail-lib>
     </div>
     <!--    如果libId不存在则显示单词库列表-->
-    <div v-else>
-      <div v-if="libs===null" class="d-flex flex-wrap">
-        <!--      <div v-if="false" class="d-flex flex-wrap">-->
-        <v-card shaped elevation="0" style="width: 333px;background: transparent" class="p10 m10r m10b"
+    <div v-else class="scroll-bar overflow-y-auto hw100">
+      <div v-if="libs===null" class="d-flex flex-wrap" :class="isSingle?'justify-center':''">
+        <v-card shaped elevation="0" style="width: 333px;
+                background: transparent" class="p10 m10r m10b"
                 v-for="i in 10" :key="i">
           <div class="d-flex justify-start m10b">
             <v-skeleton-loader type="image" :height="150" :width="125" class="mx-auto"/>
@@ -22,7 +22,6 @@
         </v-card>
       </div>
       <div v-else-if="libs.length===0">
-        <!--      <div v-else-if="true">-->
         <div class="horizontal-center d-flex flex-column" style="width: 400px">
           <img width="400" height="400" alt="什么都没有"
                src="@/assets/img/no_result.png"/>
@@ -38,15 +37,15 @@
           </div>
         </div>
       </div>
-      <div v-else class="d-flex flex-wrap">
+      <div v-else class="d-flex flex-wrap " :class="isSingle?'justify-center':''">
         <v-hover v-slot="{ hover }">
-          <v-card class="add-card" shaped :elevation="hover?2:0"
+          <v-card class="add-card m10b" :class="isSingle?'':'m10l'" shaped :elevation="hover?2:0"
                   flat v-ripple transition="fade-transition"
                   @click="showCreateDialog">
             <v-icon size="128" class="add-icon" :color="hover?'primary':''">mdi-plus</v-icon>
           </v-card>
         </v-hover>
-        <lib-card @click.native="gotoDetail(item)" class="m10l m10b"
+        <lib-card @click.native="gotoDetail(item)" class="m10b" :class="isSingle?'':'m10l'"
                   @onRemoved="onCardRemoved(i)" @showEditDialog="showEditDialog(item)"
                   v-for="(item,i) in libs" :key="i" :card="item"/>
       </div>
@@ -58,7 +57,7 @@
         </v-card-title>
         <v-card-text class="scroll-bar p5t">
           <div class="d-flex m5b">
-            <div class="flex-grow-1 m5r">
+            <div class="m5r" style="min-width: 130px">
               <v-hover v-slot="{ hover }">
                 <label class="cursor-pointer radius-8 upload-label"
                        v-ripple for="cover">
@@ -76,7 +75,7 @@
               <input type="file" ref="file" id="cover" hidden="hidden"
                      @change="onCoverSelected" accept="image/*">
             </div>
-            <div style="width: 230px;">
+            <div class="flex-grow-1">
               <v-text-field outlined dense hide-details hide-spin-buttons
                             class="m10b" label="单词库名"
                             v-model="createDialog.data.libName"/>
@@ -122,6 +121,7 @@ export default {
   components: {LibCard, DetailLib},
   data: () => ({
     libs: null,
+    isSingle: false,
     createDialog: {
       edit: false,
       show: false,
@@ -152,6 +152,12 @@ export default {
     // 如果libid不存在则加载我的单词库列表
     if (!this.libId) {
       this.getLibs()
+    }
+  },
+  mounted() {
+    this.isSingle = window.outerWidth < 715
+    window.onresize = () => {
+      this.isSingle = window.outerWidth < 715
     }
   },
   methods: {

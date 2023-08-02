@@ -244,15 +244,15 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  min-width: 1920px;
-  min-height: 1080px;
   background-size: 100% 100%;
 
   .login-container {
     user-select: none;
     position: absolute;
-    left: calc(150px + 50%);
-    top: 40%;
+    //left: calc(150px + 50%);
+    //top: 40%;
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
     width: 320px;
     min-height: 400px;
