@@ -44,6 +44,10 @@
                 <v-icon size="18">mdi-at</v-icon>
                 2439827731@qq.com
               </div>
+              <div v-if="isProduction" class="text-center text-caption">
+                版本号：
+                {{ appVersion }}
+              </div>
             </div>
           </div>
         </div>
@@ -161,7 +165,14 @@ export default {
     // 面包屑
     breadcrumb: [],
   }),
-  computed: {},
+  computed: {
+    appVersion(){
+      return this.$APPVERSION
+    },
+    isProduction(){
+      return this.isPro
+    }
+  },
   watch: {
     //监听路由变化设置菜单选择
     $route(now, old) {

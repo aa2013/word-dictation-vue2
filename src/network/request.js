@@ -55,7 +55,23 @@ export function request(config) {
         if (res.data.status !== 200) {
             let desc = res.data.desc;
             desc = desc ?? "服务器内部错误"
-            if (config.dialog) {
+            if (!config.dialog)
+                return Promise.reject(res.data);
+            if (res.data.status === 1006) {
+                vue.dialog.show({
+                    title: "登录失效",
+                    content: "请重新登录",
+                    leftShow: false,
+                    autoClose: false,
+                    type: "danger",
+                }).onRightClick(dlg => {
+                    dlg.close()
+                    localStorage.removeItem('token')
+                    setTimeout(()=>{
+                        window.location.href = href.substring(0, href.indexOf("/")) + "/login"
+                    })
+                })
+            } else {
                 vue.dialog.show({
                     title: "请求失败",
                     content: (res.data.status ?? res.data.code) + " : " + desc,

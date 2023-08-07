@@ -12,12 +12,14 @@ import Loading from '@/components/loading'
 import './assets/css/global.css'
 import './assets/css/scrollBar.css'
 import './assets/css/element-table-scroll-bar.css'
+import version from './version'
 // 教材http://www.goodkejian.com/list/3_1.htm
 Vue.prototype.snackBar = SnackBar
 Vue.prototype.dialog = MyDialog
 Vue.prototype.loading = Loading
 Vue.prototype.isDev = process.env.NODE_ENV === 'development'
 Vue.prototype.isPro = process.env.NODE_ENV === 'production'
+Vue.prototype.$APPVERSION = version
 Vue.config.productionTip = false
 new Vue({
     router,
