@@ -12,7 +12,8 @@
                         label="搜索" prepend-inner-icon="mdi-alphabetical"
                         append-icon="mdi-magnify"
                         dense hide-details outlined placeholder="输入单词..."/>
-          <v-btn elevation="0" color="primary" style="margin-top: 2px" @click="importDialog.show=true">
+          <v-btn elevation="0" color="primary" style="margin-top: 2px"
+                 v-if="lib.self" @click="importDialog.show=true">
             导入
             <v-icon>mdi-plus</v-icon>
           </v-btn>
