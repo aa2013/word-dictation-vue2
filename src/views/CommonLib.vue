@@ -4,8 +4,9 @@
       <div class="d-flex justify-space-between">
         <div class="d-flex align-center m5l">
           <v-text-field clearable class="m5h" @keydown.native.enter="initCommonList()"
-                        v-model="search"
+                        v-model="search" type="search"
                         append-icon="mdi-magnify" label="搜索" prepend-inner-icon="mdi-book-open-outline"
+                        @click:append="initCommonList()"
                         dense hide-details outlined placeholder="输入关键字..."/>
         </div>
         <div>
@@ -14,11 +15,12 @@
           </v-btn>
         </div>
       </div>
-      <div class="d-flex flex-column justify-space-between flex-grow-1">
+      <div class="d-flex flex-column justify-space-between flex-grow-1 overflow-hidden">
         <el-table ref="table"
+                  height="100"
                   :data="tableData"
                   highlight-current-row
-                  class="w100 flex-grow-1">
+                  class="w100">
           <el-table-column
               label="id"
               prop="id"

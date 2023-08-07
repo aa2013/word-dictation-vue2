@@ -3,8 +3,8 @@
     <v-card elevation="1" class="hw100 d-flex flex-column" style="padding: 10px">
       <div class="d-flex justify-space-between scroll-bar overflow-x-auto">
         <div class="d-flex align-center m5l">
-          <v-text-field clearable class="m5h" @keydown.enter="initList()"
-                        v-model="search"
+          <v-text-field clearable class="m5h" @keydown.native.enter="initList()"
+                        v-model="search" type="search" @click:append="initList()"
                         append-icon="mdi-magnify" prepend-inner-icon="mdi-lightbulb-on-outline"
                         dense hide-details outlined placeholder="输入关键字..." label="搜索"/>
         </div>
@@ -16,6 +16,7 @@
       </div>
       <div class="d-flex flex-column flex-grow-1 justify-space-between">
         <el-table ref="table"
+                  height="100"
                   class="flex-grow-1 w100"
                   :data="tableData"
                   highlight-current-row>
