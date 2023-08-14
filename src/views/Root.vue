@@ -42,7 +42,7 @@
             <div class="p10">
               <div class="text-center text-caption">
                 <v-icon size="18">mdi-at</v-icon>
-                2439827731@qq.com
+                coclyun@gmail.com
               </div>
               <div v-if="isProduction" class="text-center text-caption">
                 版本号：

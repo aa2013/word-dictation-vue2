@@ -18,11 +18,11 @@ function generateVersion() {
     }
     let res = version.match(new RegExp(/\d{6}\.\d+/))
     if (!res) {
-        version = `${year}${month}.1`;
+        version = `${year}${month}.001`;
     } else {
         const parts = res[0].split('.');
         const count = parseInt(parts[1]);
-        version = `${parts[0]}.${count + 1}`;
+        version = `${parts[0]}.${(count + 1).toString().padStart(3, '0')}`;
     }
 
     fs.writeFileSync(versionFilePath, `module.exports = '${version}';`, 'utf8');

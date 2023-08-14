@@ -614,6 +614,7 @@ export default {
      * @param size 新选择的分页大小
      * */
     sizeChange(size) {
+      this.page.size = size
       this.getWordList(null, undefined, size)
     },
     getLibInfo() {
