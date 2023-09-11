@@ -9,7 +9,7 @@ export function request(config) {
     //开发时的后端请求路径
     const devUrl = "http://localhost:8099/"
     //部署时候的路径
-    const proUrl = "https://api.coclyun.top/word/"
+    const proUrl = "http://localhost:8099/"
     const instance = axios.create({
         //根路径
         baseURL: Vue.prototype.isDev ? devUrl : proUrl,
